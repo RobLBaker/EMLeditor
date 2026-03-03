@@ -41,6 +41,3 @@ Other contributors:
 
 - Melina Kompella ([ORCID](https://orcid.org/0009-0000-3730-8082))
   \[contributor\]
-
-- Amy Sherman ([ORCID](https://orcid.org/0000-0002-9276-0087))
-  \[contributor\]

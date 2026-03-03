@@ -135,6 +135,8 @@ functions).
   : Rearrange the order of creators (authors)
 - [`set_creator_orgs()`](https://nationalparkservice.github.io/EMLeditor/reference/set_creator_orgs.md)
   : Add an organization as a creator to metadata (author in DataStore)
+- [`set_cross_reference()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cross_reference.md)
+  : Add DataStore cross references to EML
 - [`set_cui()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui.md)
   **\[deprecated\]** : Adds CUI to metadata
 - [`set_cui_code()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui_code.md)
