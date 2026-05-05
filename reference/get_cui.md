@@ -1,7 +1,7 @@
 # returns a CUI statement
 
 \#' **\[deprecated\]** Deprecated in favor of
-[`get_cui_code()`](https://nationalparkservice.github.io/EMLeditor/reference/get_cui_code.md).
+[`get_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/get_cui_code.md).
 `get_cui()` returns an English-language translation of the CUI codes
 
 ## Usage

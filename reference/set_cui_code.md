@@ -7,11 +7,11 @@ restrict data, all data should be available to the public. if the CUI
 dissemination code is PUBLIC, the CUI marking should also be PUBLIC
 (`see set_cui_marking()`) and the license should be set to CC0 or public
 domain (see
-[`set_int_rights()`](https://nationalparkservice.github.io/EMLeditor/reference/set_int_rights.md)).
+[`set_int_rights()`](https://doi-nps.github.io/EMLeditor/reference/set_int_rights.md)).
 If your data contains CUI and you need to set the CUI dissemination code
 to anything other than PUBLIC, please be prepared to provide a legal
 justification in the form of the appropriate CUI marking (see
-[`set_cui_marking()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui_marking.md)).
+[`set_cui_marking()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_marking.md)).
 
 ## Usage
 

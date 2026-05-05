@@ -2,7 +2,7 @@
 
 `get_cui_code()` returns an English-language translation of the CUI
 dissemination codes. It supersedes
-[`get_cui()`](https://nationalparkservice.github.io/EMLeditor/reference/get_cui.md),
+[`get_cui()`](https://doi-nps.github.io/EMLeditor/reference/get_cui.md),
 which has been deprecated.
 
 ## Usage

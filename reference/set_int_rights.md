@@ -28,7 +28,7 @@ set_int_rights(
   options are "CC0", "public" and "restricted". CC0 and public can only
   be used if CUI is set to PUBLIC. Restricted can only be used if CUI is
   set to any code that is NOT set to PUBLIC (see
-  [`set_cui_code()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui_code.md)
+  [`set_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_code.md)
   for a list of codes). To view the exact text that will be inserted for
   each license, please see
   https://nationalparkservice.github.io/NPS_EML_Script/stepbystep.html#intellectual-rights
@@ -63,7 +63,7 @@ set_int_rights requires that CUI information be listed in
 additionalMetadata prior to being called. The verbose `force = FALSE`
 option will warn the user if there is no CUI specified. `set_int_rights`
 checks to make sure the CUI code specified (see
-[`set_cui_code()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui_code.md))
+[`set_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_code.md))
 is appropriate for the license type chosen. For most public NPS
 datasets, the CC0 license is appropriate.
 

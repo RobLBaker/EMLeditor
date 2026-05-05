@@ -27,8 +27,7 @@ write the edited R object back to .xml.
 
 ## Function list
 
-The
-[References](https://nationalparkservice.github.io/EMLeditor/reference/index.md)
+The [References](https://doi-nps.github.io/EMLeditor/reference/index.md)
 page has a comprehensive list of all the available functions and links
 to documentation on how to use each function along with examples.
 
@@ -45,6 +44,7 @@ or the metadata file doesn’t end in \*\_metadata.xml it just won’t work.
 Using `load_metadata()`:
 
 ``` r
+
 #assuming your metadata file is in your current working directory:
 metadata <- load_metadata()
 
@@ -56,6 +56,7 @@ metadata <- load_metadata(directory = dir)
 Using `read_eml()`:
 
 ``` r
+
 #this assumes your metadata file is in your current working directory and is called 'filename_metadata.xml'
 metadata <- read_eml("filename_metadata.xml", from = "xml")
 
@@ -71,12 +72,14 @@ metadata <- read_eml("filename_metadata.xml", from = "xml")
 First, you might want to view the current title:
 
 ``` r
+
 get_title(metadata)
 ```
 
 Then you can consider editing the title:
 
 ``` r
+
 metadata <- set_title(metadata, "My New and Improved Data Package Title")
 ```
 
@@ -85,6 +88,7 @@ metadata <- set_title(metadata, "My New and Improved Data Package Title")
 View your current abstract:
 
 ``` r
+
 get_abstract(metadata)
 ```
 
@@ -93,6 +97,7 @@ support multiple parts or paragraphs, it’s probably best to keep the
 text relatively short and straight forward.
 
 ``` r
+
 new_abstract <- "Put your new abstract here. It should be more than 20 words and shoudl be sufficient for a knowledgeable person to understand what whas done, when, and where including both data collection and data QA/QC but does nto need to be as detailed as a methods statement"
 metadata <- set_abstract(metadata, new_abstract)
 ```
@@ -102,7 +107,7 @@ metadata <- set_abstract(metadata, new_abstract)
 Do this BEFORE adding any organizations as creators. If you already have
 organizations as creators, you may want to temporarily remove them while
 you add ORCIDs for individuals (see
-[`set_creator_order()`](https://nationalparkservice.github.io/EMLeditor/reference/set_creator_order.md)).
+[`set_creator_order()`](https://doi-nps.github.io/EMLeditor/reference/set_creator_order.md)).
 If you did not know that you the authors/creators of your data package
 had ORCIDs (or you didn’t register one until after making the initial
 metadata), you can add ORCIDs for individual creators. Make sure to list
@@ -110,6 +115,7 @@ the ORCIDs in the same order as the authors/creators are listed. If a
 creator does not have an ORCID, list it as NA:
 
 ``` r
+
 #single author publications:
 metadata <- set_creator_orcids(metadata, "1234-1234-1234-1234")
 
@@ -136,6 +142,7 @@ get_author_list(metadata)
 Add an organization as an author:
 
 ``` r
+
 # Set an outside organization as an author:
 metadata <- set_creator_orgs(metadata, creator_orgs = "Broadleaf, Inc.")
 
@@ -152,7 +159,7 @@ metadata <- set_creator_orgs(metadata, park_units = networks)
 You may notice that any author or creator you add will be added to the
 end of the list of authors/creators. You may then wish to re-order the
 authors/creators. The
-[`set_creator_order()`](https://nationalparkservice.github.io/EMLeditor/reference/set_creator_order.md)
+[`set_creator_order()`](https://doi-nps.github.io/EMLeditor/reference/set_creator_order.md)
 function’s default interactive mode lists all the authors in order
 (surName only for individuals) and asks you to supply an order. You can
 also use this function to remove authors.
@@ -188,6 +195,7 @@ metadata <- set_creator_order(metadata)
 Before writing your edits to .xml, make sure to validate your EML:
 
 ``` r
+
 test_validate_schema(metadata)
 ```
 
@@ -195,6 +203,7 @@ Write your R object to .xml. Don’t forget that the filename must end in
 \*\_metadata.xml:
 
 ``` r
+
 write_eml(metadata, "filename_metadata.xml")
 ```
 
@@ -203,6 +212,7 @@ data package is still passes them all (or passes any previous
 warnings/errors you got):
 
 ``` r
+
 #Assuming you data package is in the working directory and there are no extra .csv or .xml files in that directory:
 run_congruence_checks()
 ```

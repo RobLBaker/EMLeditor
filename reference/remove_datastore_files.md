@@ -7,7 +7,7 @@ case, `remove_datastore_files()` detaches all files associated with the
 relevant DataStore Reference. Once the files are detached, they cannot
 be re-attached. Instead, updated files can be re-uploaded and attached
 to the reference via
-[`upload_data_package()`](https://nationalparkservice.github.io/EMLeditor/reference/upload_data_package.md).
+[`upload_data_package()`](https://doi-nps.github.io/EMLeditor/reference/upload_data_package.md).
 
 In the interactive mode (force = FALSE), you will be informed of the
 Reference number, Reference title, Reference creation date, and a list

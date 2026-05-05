@@ -70,9 +70,9 @@ eml_object
 `set_data_urls()` sets the online distribution URL for all dataTables
 (data files in a data package) to the same URL. If you do not supply a
 URL, your metadata must include a DOI (use
-[`set_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_doi.md)
+[`set_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_doi.md)
 or
-[`set_datastore_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_datastore_doi.md)
+[`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md)
 to add a DOI - these will automatically update your data table urls to
 match the new DOI). `set_data_urls()` assumes that DOIs refer to digital
 objects on DataStore and that the last 7 digits of the DOI correspond to

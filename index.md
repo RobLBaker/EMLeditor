@@ -15,16 +15,22 @@ You can install and update the development version of EMLeditor from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
-pak::pkg_install("nationalparkservice/EMLeditor")
+pak::pkg_install("doi-nps/EMLeditor")
+
+# alternatively:
+remotes::install_github("doi-nps/eMLeditor")
 ```
 
 To install all the packages in the
-[NPSdataverse](https://github.com/nationalparkservice/NPSdataverse)
-(including EMLeditor):
+[NPSdataverse](https://github.com/doi-nps/NPSdataverse) (including
+EMLeditor):
 
 ``` r
-pak::pkg_install("nationalparkservice/NPSdataverse")
+pak::pkg_install("doi-nps/NPSdataverse")
+#alternatively:
+remotes::install_github("doi-nps/NPSdataverse)
 ```
 
 ## Workflow outline
@@ -42,8 +48,7 @@ accompanying documentation includes information on:
 4.  Checking the EML document to make sure it is schema-valid and passes
     all the necessary tests for uploading to DataStore (using the
     `run_congruence_checks()` function from the
-    [DPchecker](https://nationalparkservice.github.io/DPchecker/)
-    package)
+    [DPchecker](https://doi-nps.github.io/DPchecker/) package)
 5.  Uploading a completed data package to DataStore
 
 Please *DO NOT ACTIVATE* the DataStore reference: prior to activation,

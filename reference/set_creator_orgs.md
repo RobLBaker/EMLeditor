@@ -76,7 +76,7 @@ because `set_creator_orgs()` merely appends organizations, it 1) assumes
 that there is already one creator (as required by EMLassemblyline) and
 2) does not allow the user to change authorship order. To change the
 order of the authors, see
-[`set_creator_order()`](https://nationalparkservice.github.io/EMLeditor/reference/set_creator_order.md).
+[`set_creator_order()`](https://doi-nps.github.io/EMLeditor/reference/set_creator_order.md).
 Creator organizations and their RORs need to be supplied in two lists
 where the organization and ROR are correctly matched (i.e. the 3rd
 organization is associated with the 3rd ROR in a list). If one or more
@@ -92,7 +92,7 @@ units as creators and some non-park unit organization as a creator you
 need to call the function twice. When specifying park_units, they will
 be added in the order they occur in the IRMA units list, not necessarily
 the order they were supplied to the function. Use
-[`set_creator_order()`](https://nationalparkservice.github.io/EMLeditor/reference/set_creator_order.md)
+[`set_creator_order()`](https://doi-nps.github.io/EMLeditor/reference/set_creator_order.md)
 to re-order them if desired.
 
 ## Examples

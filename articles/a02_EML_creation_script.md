@@ -56,16 +56,19 @@ If you run into errors installing packages from github on NPS computers
 you may first need to run:
 
 ``` r
+
 options(download.file.method="wininet")
 ```
 
 ``` r
+
 #install packages
-install.packages(c("devtools", "tidyverse"))
-devtools::install_github("nationalparkservice/NPSdataverse")
+install.packages(c("remotes", "tidyverse"))
+remotes::install_github("doi-nps/NPSdataverse")
 ```
 
 ``` r
+
 # When loading packages, you may be advised to update to more recent versions
 # of dependent packages. Most of these updates likely are not critical.  
 # However, it is important that you update to the latest versions of QCkit, 
@@ -91,6 +94,7 @@ This becomes the file name of your .xml file. Be sure it ends in
 to include the extension (.xml).
 
 ``` r
+
 metadata_id <- "Test_EVER_AA_metadata"
 ```
 
@@ -101,6 +105,7 @@ Give the data package a title. FAIR principles suggest titles of between
 a naive user would interpret it.
 
 ``` r
+
 package_title <- "TEST_Everglades National Park Accuracy Assessment (AA) Data Package"
 ```
 
@@ -109,6 +114,7 @@ package_title <- "TEST_Everglades National Park Accuracy Assessment (AA) Data Pa
 Choose from either “ongoing” or “complete”
 
 ``` r
+
 data_type <- "complete"
 ```
 
@@ -120,6 +126,7 @@ you can set the working_folder to
 different directory you will need to specify that directory.
 
 ``` r
+
 working_folder <- getwd()
 # or:
 # working_folder <- setwd("C:/users/<yourusername>/Documents/my_data_package_folder)
@@ -130,6 +137,7 @@ working_folder <- getwd()
 Tell R what your data files are called.
 
 ``` r
+
 # if the data files are in your working directory (and the only .csv files in your working directory are data files:
 data_files <- list.files(pattern = "*.csv")
 
@@ -145,6 +153,7 @@ actual file names. Make sure that they are in the same order as the
 files in data_files.
 
 ``` r
+
 data_names <- c("TEST_AA Point Location Data",
                 "TEST_AA Vegetation Coverage Data")
 ```
@@ -159,6 +168,7 @@ sections. Again, make sure these are in the same order as the files they
 are describing.
 
 ``` r
+
 data_descriptions <- c("TEST_Everglades Vegetation Map Accuracy Assessment point data",
                        "TEST_Everglades Vegetation Map Accuracy Assessment vegetation data")
 ```
@@ -172,6 +182,7 @@ holder. Don’t worry - this information will be updated later on when you
 add a Digital Object Identifier(DOI) to the metadata.
 
 ``` r
+
 data_urls <- c(rep("temporary URL", length(data_files)))
 ```
 
@@ -185,6 +196,7 @@ such as “scientificName”. If your data package does not have taxonomic
 data, skip this step.
 
 ``` r
+
 # the file(s) where scientific names are located:
 data_taxa_tables <- "qry_Export_AA_VegetationDetails.csv"
 
@@ -202,11 +214,11 @@ information you are supplying is the park units (and their bounding
 boxes) you can also skip this step; Park Units and the corresponding GPS
 coordinates for their bounding boxes will be added at a later step. If
 your coordinates are in UTMs and not GPS, try the
-[`convert_utm_to_ll()`](https://nationalparkservice.github.io/QCkit/reference/convert_utm_to_ll.html)
-function in the [QCkit
-package](https://nationalparkservice.github.io/QCkit/)
+[`convert_utm_to_ll()`](https://doi-nps.github.io/QCkit/reference/convert_utm_to_ll.html)
+function in the [QCkit package](https://doi-nps.github.io/QCkit/)
 
 ``` r
+
 data_coordinates_table <- "qry_Export_AA_points.csv"
 data_latitude <- "decimalLatitude"
 data_longitude <- "decimalLongitude"
@@ -226,6 +238,7 @@ format or setting the date to the future will cause errors down the
 road!
 
 ``` r
+
 startdate <- ymd("2010-01-26")
 enddate <- ymd("2013-01-04")
 ```
@@ -242,20 +255,20 @@ component.
 ### FUNCTION 1 - Core Metadata Information
 
 This function creates blank .txt template files for the
-[abstract](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#abtract-txt),
+[abstract](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#abtract-txt),
 [additional
-information](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#additional_info),
+information](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#additional_info),
 [custom
-units](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#custom_units-txt),
+units](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#custom_units-txt),
 [intellectual
-rights](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#intellectual_rights-txt),
-[keywords](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#keywords-txt),
-[methods](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#methods-txt),
+rights](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#intellectual_rights-txt),
+[keywords](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#keywords-txt),
+[methods](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#methods-txt),
 and
-[personnel](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#personnel-txt).
+[personnel](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#personnel-txt).
 
 The [personnel.txt file can best be edited in
-excel](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#personnel-txt).
+excel](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#personnel-txt).
 You must list at least one person with a “creator” role and one person
 with a “contact” role (you can list the same person twice for both.).
 Creators will be authors and included in the data package citation. You
@@ -271,7 +284,7 @@ warnings you do not need to have a designated Principle Investigator
 (PI) listed in the personnel.txt file.
 
 We encourage you to craft your
-[abstract](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#abstract-txt)
+[abstract](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#abstract-txt)
 in a text editor, NOT Word. Your abstract will be forwarded to data.gov,
 DataCite, google dataset search, etc. so it is worth some time to
 carefully consider what is relevant and important information for an
@@ -290,10 +303,11 @@ license will need to be updated. However, to ensure that the licence
 meets NPS specifications and properly coincides with CUI designations,
 the best way to update the license information is during a later step
 using
-[`EMLeditor::set_int_rights()`](https://nationalparkservice.github.io/EMLeditor/reference/set_int_rights.md).
+[`EMLeditor::set_int_rights()`](https://doi-nps.github.io/EMLeditor/reference/set_int_rights.md).
 There is no need to edit this .txt file.
 
 ``` r
+
 EMLassemblyline::template_core_metadata(path = working_folder, 
                        license = "CC0") # that '0' is a zero!
 ```
@@ -301,7 +315,7 @@ EMLassemblyline::template_core_metadata(path = working_folder,
 ### FUNCTION 2 - Data Table Attributes
 
 This function creates an
-[“attributes_datafilename.txt”](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#attributes_-txt)
+[“attributes_datafilename.txt”](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#attributes_-txt)
 file for each data file. This can be opened in Excel (we recommend
 against trying to update these in a text editor) and fill in/adjust the
 columns for attributeDefinition, class, unit, etc. refer to
@@ -312,6 +326,7 @@ new/deleted fields) are modified from the previous year. NOTE that if
 these files already exist from a previous run, they are not overwritten.
 
 ``` r
+
 EMLassemblyline::template_table_attributes(path = working_folder, 
                           data.table = data_files, 
                           write.file = TRUE)
@@ -320,7 +335,7 @@ EMLassemblyline::template_table_attributes(path = working_folder,
 ### FUNCTION 3 - Data Table Categorical Variable
 
 This function Creates a
-[“catvars_datafilename.txt”](https://nationalparkservice.github.io/EMLeditor/articles/a03_Template_edits.html#catvars_-txt)
+[“catvars_datafilename.txt”](https://doi-nps.github.io/EMLeditor/articles/a03_Template_edits.html#catvars_-txt)
 file for each data file that has columns with a class = categorical.
 These .txt files will include each unique ‘code’ and allow input of the
 corresponding ‘definition’.NOTE that since the list of codes is
@@ -333,6 +348,7 @@ resulting file and you may want to add those manually). NOTE that if
 these files already exist from a previous run, they are not overwritten.
 
 ``` r
+
 EMLassemblyline::template_categorical_variables(path = working_folder, 
                                data.path = working_folder, 
                                write.file = TRUE)
@@ -353,10 +369,11 @@ This function creates a geographic_coverage.txt file that lists your
 sites as points as long as your coordinates are in lat/long. If your
 coordinates are in UTM it is probably easiest to convert them first or
 create the geographic_coverage.txt file another way (see
-[QCkit](https://nationalparkservice.github.io/QCkit/) for R functions
-that will convert UTM to lat/long).
+[QCkit](https://doi-nps.github.io/QCkit/) for R functions that will
+convert UTM to lat/long).
 
 ``` r
+
 EMLassemblyline::template_geographic_coverage(path = working_folder, 
                              data.path = working_folder,
                              data.table = data_coordinates_table, 
@@ -375,6 +392,7 @@ the scientific name at ITIS and if it fails will then look at GBIF. If
 you have lots of taxa, this could take some time to complete.
 
 ``` r
+
 EMLassemblyline::template_taxonomic_coverage(path = working_folder, 
                             data.path = working_folder, 
                             taxa.table = data_taxa_tables,
@@ -394,6 +412,7 @@ items that might be missing or need attention. Fix these issues and then
 re-run the `make_eml()` function.
 
 ``` r
+
 my_metadata <- EMLassemblyline::make_eml(path = working_folder,
                dataset.title = package_title,
                data.table = data_files,
@@ -412,6 +431,7 @@ my_metadata <- EMLassemblyline::make_eml(path = working_folder,
 This is a good point to pause and test whether your EML is valid.
 
 ``` r
+
 EML::eml_validate(my_metadata)
 ```
 
@@ -432,12 +452,12 @@ not attempt to edit it by hand.
 Now that you have valid EML metadata, you need to add NPS-specific
 elements and fields. For instance, unit connections, DOIs, referencing a
 DRR, etc. More information about these functions can be found at:
-<https://nationalparkservice.github.io/EMLeditor/>.
+<https://doi-nps.github.io/EMLeditor/>.
 
 ### Add Controlled Unclassified Information (CUI) codes
 
 This is a required step, using the function
-[`set_cui_code()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui_code.md).
+[`set_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_code.md).
 It is important to indicate not only that your data package contains
 CUI, but also to inform users if your data package does NOT contain CUI
 because empty fields can be ambiguous (does it not contain CUI ordid the
@@ -458,6 +478,7 @@ dissemination codes. Watch out for the spaces! These are:
   <https://www.archives.gov/cui/registry/limited-dissemination>
 
 ``` r
+
 my_metadata <- EMLeditor::set_cui_code(my_metadata, "PUBLIC")
 # note that in this case I have added the CUI code to the original R object, 
 # "my_metadata" but by giving it a new name, i.e. "my_meta2" I could have
@@ -471,10 +492,10 @@ EMLassemblyine and ezEML provide some attractive boilerplate for setting
 the intellectual rights. It looks reasonable and so is easy to just
 keep. However, NPS has some specific regulations about what can and
 cannot be in the intellectualRights tag. Use
-[`set_int_rights()`](https://nationalparkservice.github.io/EMLeditor/reference/set_int_rights.md)
+[`set_int_rights()`](https://doi-nps.github.io/EMLeditor/reference/set_int_rights.md)
 to replace the text with NPS-approved text. Note: You must first add the
 CUI dissemination code using
-[`set_cui()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui.md)
+[`set_cui()`](https://doi-nps.github.io/EMLeditor/reference/set_cui.md)
 as the dissemination code and license must agree. That is, you cannot
 give a data package with a PUBLIC dissemination code a “restricted”
 license (and vise versa: a restricted data package that contains CUI
@@ -502,11 +523,12 @@ is appropriate**:
   distribution are prohibited.”**
 
 The
-[`set_int_rights()`](https://nationalparkservice.github.io/EMLeditor/reference/set_int_rights.md)
+[`set_int_rights()`](https://doi-nps.github.io/EMLeditor/reference/set_int_rights.md)
 function will also put the name of your license in a field in EML for
 DataStore harvesting.
 
 ``` r
+
 # choose from "restricted", "public" or "CC0" (zero), see above:
 my_metadata <- EMLeditor::set_int_rights(my_metadata, "CC0")
 ```
@@ -515,17 +537,17 @@ my_metadata <- EMLeditor::set_int_rights(my_metadata, "CC0")
 
 Add your data package’s Digital Object Identifier (DOI) to the metadata.
 The
-[`set_datastore_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_datastore_doi.md)
+[`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md)
 function requires that you are logged on to the VPN. It initiates a
 draft data package reference on DataStore, and populates the reference
 with a title pulled from your metadata, “\[DRAFT\] : ”. This temporary
 title is purely for your tracking purposes and can easily be updated
 later. The
-[`set_datastore_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_datastore_doi.md)
+[`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md)
 function will then insert the corresponding DOI for your data package
 into your metadata. Now that a draft reference has been initiated on
 DataStore, it is possible to fill in the online URL for each data file.
-[`set_datastore_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_datastore_doi.md)
+[`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md)
 automatically does that for you too. There are a few things to keep in
 mind: 1) Your DOI and the data package reference are not yet active and
 are not publicly accessible until after review and
@@ -539,6 +561,7 @@ them will be auto-populated based on the metadata you upload. Any fields
 you do populate will be over-written by the content in your metadata.
 
 ``` r
+
 my_metadata <- EMLeditor::set_datastore_doi(my_metadata)
 ```
 
@@ -556,6 +579,7 @@ activated until after publication so that you have plenty of time to
 construct the DRR.
 
 ``` r
+
 my_metadata <- EMLeditor::set_drr(my_metadata, 7654321, "DRR Title")
 ```
 
@@ -570,6 +594,7 @@ appropriate 3-character ISO 639-2 code.Available languages:
 <https://www.loc.gov/standards/iso639-2/php/code_list.php>
 
 ``` r
+
 my_metadata <- EMLeditor::set_language(my_metadata,
                                        "English")
 ```
@@ -587,6 +612,7 @@ park units will be more informative than the bounding box for the entire
 network.
 
 ``` r
+
 park_units <- c("ROMO", "GRSA", "YELL")
 my_metadata <- EMLeditor::set_content_units(my_metadata,
                                             park_units)
@@ -599,6 +625,7 @@ be a single park (ROMO) or a network (ROMN). It may be identical to the
 units listed in the previous step, overlapping, or entirely different.
 
 ``` r
+
 # a single producing unit:
 my_metadata <- EMLeditor::set_producing_units(my_metadata,
                                               "ROMN")
@@ -622,6 +649,7 @@ DataStore must have ownership level permissions on both the data package
 and the project.
 
 ``` r
+
 # where "1234567" is the DataStore Reference id for the Project
 # that the data package should be linked to.
 my_metadata <- EMLeditor::set_project(my_metadata, 1234567)
@@ -633,6 +661,7 @@ Almost done! This is another great time to validate your EML and make
 sure Everything is schema valid. Run:
 
 ``` r
+
 EML::eml_validate(my_metadata)
 ```
 
@@ -653,6 +682,7 @@ Now it’s time to convert your R object to an .xml file and save it. Keep
 in mind that the file name should end with “\_metadata.xml”.
 
 ``` r
+
 EML::write_eml(my_metadata, "mymetadatafilename_metadata.xml")
 ```
 
@@ -663,6 +693,7 @@ additional tests on your .xml metadata file. This function assumes there
 is only one .xml file in the directory:
 
 ``` r
+
 # This assumes that you have written your metadata to an .xml file and that the .xml file is in the current working directory.
 DPchecker::run_congruence_checks(check_metadata_only = TRUE)
 
@@ -680,6 +711,7 @@ project. It will run all of the checks in the code chunk directly above
 “check your .xml file” and then some!
 
 ``` r
+
 # this assumes that the data package is the working directory
 DPchecker::run_congruence_checks()
 
@@ -691,16 +723,15 @@ DPchecker::run_congruence_checks()
 
 If everything checked out, you should be ready to upload your data
 package! We recommend using
-[`upload_data_package()`](https://nationalparkservice.github.io/EMLeditor/reference/upload_data_package.md)
+[`upload_data_package()`](https://doi-nps.github.io/EMLeditor/reference/upload_data_package.md)
 to accomplish this. The function automatically checks your DOI and
 uploads to the correct reference on DataStore. All of your files for the
 data package need to be in the same folder, there can be only one .xml
 file (ending in “\_metadata.xml”) and all the other files should be data
-files in .csv format. Each individual file should be \< 32Mb. If you
-have files \> 32Mb, you will need to upload them manually using the web
-interface on DataStore.
+files in .csv format.
 
 ``` r
+
 # this assumes your data package is in the current working directory
 EMLeditor::upload_data_package()
 

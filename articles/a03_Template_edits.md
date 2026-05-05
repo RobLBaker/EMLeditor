@@ -131,7 +131,7 @@ EMLassemblyline autopopulates an “intellectual_rights.txt” file and will
 use that file to add information to the element in your EML. Once you
 have finished generating your EML you need to update your intellectual
 rights to coincide with NPS guidance using a separate
-[`EMLeditor::set_int_rights()`](https://nationalparkservice.github.io/EMLeditor/reference/set_int_rights.md)
+[`EMLeditor::set_int_rights()`](https://doi-nps.github.io/EMLeditor/reference/set_int_rights.md)
 function.
 
 ## attributes\_\*.txt
@@ -245,13 +245,13 @@ latitudes south of the equator and longitudes west of the prime
 meridian. For points, repeat latitude and longitude coordinates in
 respective north/south and east/west columns. If you need to convert
 from UTMs, try using the `utm_to_ll()` function in the
-[R/QCkit](https://github.com/nationalparkservice/QCkit) package.
+[R/QCkit](https://github.com/doi-nps/QCkit) package.
 
 Currently EML handles points and rectangles well. At the least precise
 end of spectrum you could enter an entire park unit as geographic For a
 convenient way to get these coordinates, see the `get_park_polygon()`
-function in the
-[R/EMLeditor](https://github.com/nationalparkservice/EMLeditor) package.
+function in the [R/EMLeditor](https://github.com/doi-nps/EMLeditor)
+package.
 
 We strongly encourage you to be as precise as possible with your
 geographicCoverage and provide sampling points (e.g. along a transect)
@@ -262,8 +262,7 @@ points will also be directly discoverable through DataStore searches.
 If you have CUI concerns about the specific locations of your sites,
 consider fuzzing them rather than completely removing them. One good
 tool for fuzzing geographic coordinates is the `fuzz_location()`
-function in the [R/QCkit](https://github.com/nationalparkservice/QCkit)
-package.
+function in the [R/QCkit](https://github.com/doi-nps/QCkit) package.
 
 ## taxonomic_coverage.txt
 

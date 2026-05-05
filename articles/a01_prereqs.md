@@ -28,15 +28,15 @@ website](https://doimspp.sharepoint.com/sites/nps-nrss-imdiv/SitePages/R-Adv.asp
 for more information. You will also need to install the R package
 [tidyverse](https://www.tidyverse.org/) as well as some other packages
 from CRAN. Many of these are available as part of the
-[NPSdataverse](https://nationalparkservice.github.io/NPSdataverse/)
-package.
+[NPSdataverse](https://doi-nps.github.io/NPSdataverse/) package.
 
 ``` r
+
 #install packages:
-install.packages(c("devtools", "tidyverse"))
+install.packages(c("remotes", "tidyverse"))
 
 #the NPSdataverse includes EMLassemblyline, EMLeditor, and several other useful packages:
-devtools::install_github("nationalparkservice/NPSdataverse")
+remotes::install_github("doi-nps/NPSdataverse")
 
 library(tidyverse)
 library(NPSdataverse)

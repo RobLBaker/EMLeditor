@@ -3,7 +3,7 @@
 **\[experimental\]** The Controlled Unclassified Information (CUI)
 marking is different from the CUI dissemination code. The CUI
 dissemination code (set
-[`set_cui_code()`](https://nationalparkservice.github.io/EMLeditor/reference/set_cui_code.md))
+[`set_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_code.md))
 sets who can have access to the data package. The CUI marking set by
 `set_cui_marking()` specifies the reason (if any) that the data are
 being restricted. If the CUI dissemination code is set to PUBLIC, the

@@ -1,7 +1,7 @@
 # Initiates a draft reference and inserts the reserved DOI into metadata
 
 `set_datastore_doi()` differs from
-[`set_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_doi.md)
+[`set_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_doi.md)
 in that this function generates a draft reference on DataStore and uses
 that draft reference to auto-populate the DOI within metadata whereas
 the latter requires manually initiating a draft reference in DataStore

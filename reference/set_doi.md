@@ -10,7 +10,7 @@ existing DOI or overwrite it. Reports back the existing or new DOI,
 depending on the user input.
 
 As an alternative, consider using
-[`set_datastore_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_datastore_doi.md),
+[`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md),
 which will automatically initiate a draft reference on DataStore and
 inject the corresponding DOI into metadata.
 

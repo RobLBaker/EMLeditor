@@ -11,8 +11,8 @@ these settings or take advantage of advanced functionality.
 ## Test functions on irmadev
 
 Several of the EMLeditor functions allow you to write to DataStore
-([`set_datastore_doi()`](https://nationalparkservice.github.io/EMLeditor/reference/set_datastore_doi.md),
-[`upload_data_package()`](https://nationalparkservice.github.io/EMLeditor/reference/upload_data_package.md),
+([`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md),
+[`upload_data_package()`](https://doi-nps.github.io/EMLeditor/reference/upload_data_package.md),
 etc). By default these functions will write to the production (i.e
 “public”) version of DataStore. However, if you want to test your
 scripts, you can set these functions to write to the development version
@@ -21,12 +21,14 @@ of DataStore (irmadev):
 Test putting a draft reference on irmadev:
 
 ``` r
+
 set_datastore_doi(metadata, dev = TRUE)
 ```
 
 Test uploading your data package to irmadev:
 
 ``` r
+
 upload_data_package(dev = TRUE)
 ```
 
@@ -44,6 +46,7 @@ changes to your metadata and you will not be advised of any change or
 lack of change. Inspect your final product carefully.
 
 ``` r
+
 metadata <- set_title(metadata, "My new title", force = TRUE)
 ```
 
@@ -68,13 +71,13 @@ If you would like to set the publisher to something other than the Fort
 Collins Office of the National Park Service or your would like to set
 the agency that created the data package to something other than NPS,
 use the
-[`set_publisher()`](https://nationalparkservice.github.io/EMLeditor/reference/set_publisher.md)
+[`set_publisher()`](https://doi-nps.github.io/EMLeditor/reference/set_publisher.md)
 function. Be sure to specify `NPS = FALSE` or the function will perform
 the default operations (set publisher to NPS at the Fort Collins Office
 and set the agency to NPS).
 
 Warning:
-[`set_publisher()`](https://nationalparkservice.github.io/EMLeditor/reference/set_publisher.md)
+[`set_publisher()`](https://doi-nps.github.io/EMLeditor/reference/set_publisher.md)
 should only be used in a few, likely rare, circumstances:
 
 1.  If the publisher Is NOT the National Park Service
@@ -87,10 +90,11 @@ should only be used in a few, likely rare, circumstances:
 
 It’s probably a good idea to take a look at all the arguments you need
 to supply to the
-[`set_publisher()`](https://nationalparkservice.github.io/EMLeditor/reference/set_publisher.md)
+[`set_publisher()`](https://doi-nps.github.io/EMLeditor/reference/set_publisher.md)
 function prior to using it:
 
 ``` r
+
 args(set_publisher)
 #function (eml_object, org_name = "NPS", street_address, 
 #    city, state, zip_code, country, URL, email, ror_id, for_or_by_NPS = TRUE, 
@@ -100,6 +104,7 @@ args(set_publisher)
 You can then add any custom publisher you would like:
 
 ``` r
+
 metadata <- set_publisher(metadata, org_name = "Broadleaf",
                           street_address = "1234 Strasse St.",
                           city = "Metropolis",
@@ -120,6 +125,7 @@ publisher! Make sure to include the parameter `NPS = FALSE` if you
 invoke any additional “set\_” functions:
 
 ``` r
+
 metadata <- set_additional_info(metadata,
                                 "Info for the Notes section on DataStore",
                                 NPS = FALSE)
@@ -129,6 +135,6 @@ metadata <- set_additional_info(metadata,
 
 A comprehensive list of all available EMLeditor functions can be found
 via the
-[Reference](https://nationalparkservice.github.io/EMLeditor/reference/index.md)
-tab at the top of the web page. Click on each function to read the
+[Reference](https://doi-nps.github.io/EMLeditor/reference/index.md) tab
+at the top of the web page. Click on each function to read the
 associated documentation.

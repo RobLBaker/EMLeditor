@@ -16,16 +16,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/nationalparkservice/EMLeditor/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/doi-NPS/EMLeditor/blob/main/DESCRIPTION)
 
 Baker R, Patterson J (2026). *EMLeditor: View and Edit EML Metadata*. R
-package version 1.2.0,
-<https://github.com/nationalparkservice/EMLeditor>.
+package version 1.2.0, <https://github.com/doi-nps/EMLeditor>.
 
     @Manual{,
       title = {EMLeditor: View and Edit EML Metadata},
       author = {Robert Baker and Judd Patterson},
       year = {2026},
       note = {R package version 1.2.0},
-      url = {https://github.com/nationalparkservice/EMLeditor},
+      url = {https://github.com/doi-nps/EMLeditor},
     }
