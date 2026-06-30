@@ -27,6 +27,7 @@ Imports:
     readr,
     utils,
     EML,
+    gdata,
     magrittr,
     stringr,
     lubridate,
@@ -49,7 +50,6 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     QCkit,
-    gdata,
     sf,
     withr
 Config/testthat/edition: 3
