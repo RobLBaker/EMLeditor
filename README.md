@@ -4,7 +4,6 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CodeFactor](https://www.codefactor.io/repository/github/doi-nps/emleditor/badge)](https://www.codefactor.io/repository/github/doi-nps/emleditor)
 [![R-CMD-check](https://github.com/doi-nps/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/doi-nps/EMLeditor/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
