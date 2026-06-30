@@ -1814,7 +1814,7 @@ set_cross_reference <- function(eml_object,
   # generate cross reference additionalMetadata item ----
   cross_refs <- list()
   if (length(seq_along(cross_ref_id)) == 1) {
-    cross_refs <-
+    add_meta_cross_refs <-
       list(#describes = cross_ref_description,
            metadata = list(crossReferences =
                              list(crossReference_1 =
