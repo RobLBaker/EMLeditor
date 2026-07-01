@@ -1,6 +1,9 @@
 # EMLeditor v1.2.1 (Development version)
+## 2026-07-01
+  * Add documentation to template script about cross references; clarify that content units are optional.
+  * Add documentation to github.io pages about cross references; clarify that content units are optional.
 ## 2026-06-30
-  * Add `.finalize_eml()` function to utils.R. Refactor and fix `set_cross_references()` such that it no longer appends numbers to each cross reference.
+  * Add `.finalize_eml()` function to utils.R. Refactor and fix `set_cross_reference()` such that it no longer appends numbers to each cross reference.
 ## 2026-05-05
   * Updated EML script .rmd to include package names when suggesting running `issues()` function.
   * Remove pkgdown.yml for DGEC github actions compliance
