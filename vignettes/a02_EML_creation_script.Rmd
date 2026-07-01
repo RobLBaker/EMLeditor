@@ -584,7 +584,7 @@ my_metadata <- EMLeditor::set_language(my_metadata,
                                        "English")
 ```
 
-## Add content unit links
+## Add content unit links (optional)
 
 These are the park units where data were collected from, for instance
 ROMO, not ROMN. If the data package includes data from more than one
@@ -595,6 +595,8 @@ corresponding to bounding boxes for each park unit listed will
 automatically be generated and inserted into the metadata. Individual
 park units will be more informative than the bounding box for the entire
 network.
+
+If your data do not come from a specific location (e.g. just a list of endangered species, data from lab samples) you can skip the following code.
 
 ```{r content_units, eval=FALSE}
 park_units <- c("ROMO", "GRSA", "YELL")
@@ -631,10 +633,18 @@ add it to metadata. 4) Whoever uploads and extracts the metadata on
 DataStore must have ownership level permissions on both the data package
 and the project.
 
+
 ```{r add_project, eval = FALSE}
 # where "1234567" is the DataStore Reference id for the Project
 # that the data package should be linked to.
 my_metadata <- EMLeditor::set_project(my_metadata, 1234567)
+```
+
+## Add cross references (optional)
+You can also add one or more cross-references to your data package. These will be linked to the published data package on DataStore. For instance, if there is a .pdf, map, or diagram of a sampling scheme that is particularly relevant to your data package but cannot be included within the data package (because its not in .csv format) you can list it as a cross-reference.
+
+```{r add_cross_ref, eval = FALSE}
+my_metadata <- EMLeditor::set_cross_reference(my_metadata, 1234567)
 ```
 
 ## Validate your EML
