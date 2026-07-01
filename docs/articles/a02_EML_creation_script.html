@@ -585,7 +585,7 @@ appropriate 3-character ISO 639-2 code.Available languages: <a href="https://www
 <span>                                       <span class="st">"English"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="add-content-unit-links">Add content unit links<a class="anchor" aria-label="anchor" href="#add-content-unit-links"></a>
+<h3 id="add-content-unit-links-optional">Add content unit links (optional)<a class="anchor" aria-label="anchor" href="#add-content-unit-links-optional"></a>
 </h3>
 <p>These are the park units where data were collected from, for instance
 ROMO, not ROMN. If the data package includes data from more than one
@@ -596,6 +596,9 @@ corresponding to bounding boxes for each park unit listed will
 automatically be generated and inserted into the metadata. Individual
 park units will be more informative than the bounding box for the entire
 network.</p>
+<p>If your data do not come from a specific location (e.g. just a list
+of endangered species, data from lab samples) you can skip the following
+code.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">park_units</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ROMO"</span>, <span class="st">"GRSA"</span>, <span class="st">"YELL"</span><span class="op">)</span></span>
 <span><span class="va">my_metadata</span> <span class="op">&lt;-</span> <span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/set_content_units.html">set_content_units</a></span><span class="op">(</span><span class="va">my_metadata</span>,</span>
@@ -636,11 +639,23 @@ the data package and the project.</p>
 <span><span class="va">my_metadata</span> <span class="op">&lt;-</span> <span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/set_project.html">set_project</a></span><span class="op">(</span><span class="va">my_metadata</span>, <span class="fl">1234567</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="add-cross-references-optional">Add cross references (optional)<a class="anchor" aria-label="anchor" href="#add-cross-references-optional"></a>
+</h3>
+<p>You can also add one or more cross-references to your data package.
+These will be linked to the published data package on DataStore. For
+instance, if there is a .pdf, map, or diagram of a sampling scheme that
+is particularly relevant to your data package but cannot be included
+within the data package (because its not in .csv format) you can list it
+as a cross-reference.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_metadata</span> <span class="op">&lt;-</span> <span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/set_cross_reference.html">set_cross_reference</a></span><span class="op">(</span><span class="va">my_metadata</span>, <span class="fl">1234567</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="validate-your-eml">Validate your EML<a class="anchor" aria-label="anchor" href="#validate-your-eml"></a>
 </h3>
 <p>Almost done! This is another great time to validate your EML and make
 sure Everything is schema valid. Run:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">EML</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/emld/man/eml_validate.html" class="external-link">eml_validate</a></span><span class="op">(</span><span class="va">my_metadata</span><span class="op">)</span></span></code></pre></div>
 <p>if your EML is valid you should see the following (admittedly
 crypitic):</p>
@@ -658,7 +673,7 @@ not attempt to edit it by hand.</p>
 </h2>
 <p>Now it’s time to convert your R object to an .xml file and save it.
 Keep in mind that the file name should end with “_metadata.xml”.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">EML</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/EML/man/write_eml.html" class="external-link">write_eml</a></span><span class="op">(</span><span class="va">my_metadata</span>, <span class="st">"mymetadatafilename_metadata.xml"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -667,7 +682,7 @@ Keep in mind that the file name should end with “_metadata.xml”.</p>
 <p>You’re EML metadata file should be ready for upload. You can run some
 additional tests on your .xml metadata file. This function assumes there
 is only one .xml file in the directory:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This assumes that you have written your metadata to an .xml file and that the .xml file is in the current working directory.</span></span>
 <span><span class="fu">DPchecker</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DPchecker/man/run_congruence_checks.html" class="external-link">run_congruence_checks</a></span><span class="op">(</span>check_metadata_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -683,7 +698,7 @@ requirements and that the data and metadata are properly specified and
 coincide. This assumes that your data package is in the root of your R
 project. It will run all of the checks in the code chunk directly above
 “check your .xml file” and then some!</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># this assumes that the data package is the working directory</span></span>
 <span><span class="fu">DPchecker</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DPchecker/man/run_congruence_checks.html" class="external-link">run_congruence_checks</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -700,7 +715,7 @@ to the correct reference on DataStore. All of your files for the data
 package need to be in the same folder, there can be only one .xml file
 (ending in “_metadata.xml”) and all the other files should be data files
 in .csv format.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># this assumes your data package is in the current working directory</span></span>
 <span><span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/upload_data_package.html">upload_data_package</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
