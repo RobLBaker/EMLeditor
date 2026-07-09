@@ -317,7 +317,6 @@ globalVariables(c("UnitCode",
 #' @param NPS Logical. Whether the product is by or for NPS
 #'
 #' @returns eml_object
-#' @export
 #' @noRd
 #'
 #' @examples
