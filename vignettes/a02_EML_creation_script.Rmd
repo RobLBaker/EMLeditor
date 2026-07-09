@@ -641,7 +641,7 @@ my_metadata <- EMLeditor::set_project(my_metadata, 1234567)
 ```
 
 ## Add cross references (optional)
-You can also add one or more cross-references to your data package. These will be linked to the published data package on DataStore. For instance, if there is a .pdf, map, or diagram of a sampling scheme that is particularly relevant to your data package but cannot be included within the data package (because its not in .csv format) you can list it as a cross-reference.
+You can also add one or more cross-references to your data package. These will be linked to the published data package on DataStore. For instance, if there is a .pdf, map, or diagram of a sampling scheme that is particularly relevant to your data package but cannot be included within the data package (because it's not in .csv format) you can list it as a cross-reference.
 
 ```{r add_cross_ref, eval = FALSE}
 my_metadata <- EMLeditor::set_cross_reference(my_metadata, 1234567)
