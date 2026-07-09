@@ -310,3 +310,20 @@ globalVariables(c("UnitCode",
   var1 <- readline(prompt = (""))
   return(var1)
 }
+
+# Internal helper: apply NPS publisher + version stamp and return object
+#'
+#' @param eml_object An eml object
+#' @param NPS Logical. Whether the product is by or for NPS
+#'
+#' @returns eml_object
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#'   .finalize_eml(eml_object, NPS = TRUE)
+#'   }
+.finalize_eml <- function(eml_object, NPS) {
+  if (NPS) eml_object <- .set_npspublisher(eml_object)
+  .set_version(eml_object)
+}

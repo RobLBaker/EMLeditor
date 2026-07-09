@@ -271,9 +271,7 @@ where the 1234567 number corresponds to the 7-digit DataStore reference ID.
 #### Add information about a DRR (optional) 
 If you are producing (or plan to produce) a DRR, add links to the DRR describing the data package.
 
-You will need the DOI for the DRR you are drafting as well as the DRR's title. Go to DataStore and initiate a draft DRR, including a title. For the purposes of the data package, there is no need to populate any other fields. At this point, you do not need to activate the DRR reference and, while a DOI has been reserved for your DRR,
-it will not be activated until after publication so that you have plenty of 
-time to construct the DRR.
+You will need the DOI for the DRR you are drafting as well as the DRR's title. Go to DataStore and initiate a draft DRR, including a title. For the purposes of the data package, there is no need to populate any other fields. At this point, you do not need to activate the DRR reference and, while a DOI has been reserved for your DRR,it will not be activated until after publication so that you have plenty of time to construct the DRR.
 ```{r DRR_links}
 my_metadata <- EMLeditor::set_drr(my_metadata, 7654321, "DRR Title")
 ```
@@ -284,8 +282,10 @@ This is the human language (as opposed to computer language) that the data packa
 my_metadata <- EMLeditor::set_language(my_metadata, "English")
 ```
 
-#### Add content unit links 
+#### Add content unit links (optional)
 These are the park units where data were collected from, for instance ROMO, not ROMN. If the data package includes data from more than one park, they can all be listed. For instance, if data were collected from all park units within a network, each unit should be listed separately rather than the network. This is because the geographic coordinates corresponding to bounding boxes for each park unit listed will automatically be generated and inserted into the metadata. Individual park units will be more informative than the bounding box for the entire network.
+
+If your data do not come from a specific location (e.g. just a list of endangered species, data from lab samples) you can skip lines 291-294. 
 ```{r content_units}
 park_units <- c("ROMO", "GRSA", "YELL")
 my_metadata <- EMLeditor::set_content_units(my_metadata, park_units)
@@ -310,6 +310,12 @@ You can add a project to your metadata. Once the metadata are extracted on DataS
 # where "1234567" is the DataStore Reference id for the Project
 # that the data package should be linked to.
 my_metadata <- EMLeditor::set_project(my_metadata, 1234567)
+```
+
+#### Add cross references to your data package (optional)
+You can also add one or more cross-references to your data package. These will be linked to the published data package on DataStore. For instance, if there is a .pdf, map, or diagram of a sampling scheme that is particularly relevant to your data package but cannot be included within the data package (because its not in .csv format) you can list it as a cross-reference.
+```{r add_cross_ref}
+my_metadata <- EMLediter::set_cross_reference(my_metadata, 1234567)
 ```
 
 ## Validate your EML 
