@@ -553,8 +553,7 @@ set_cui_code <- function(eml_object,
 #' \dontrun{
 #' set_cui(eml_object, "PUBFUL")
 #' }
-set_cui <- function(eml_object, cui_code = c("PUBLIC", "NOCON", "DL ONLY",
-                                             "FEDCON", "FED ONLY"),
+set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
                     force = FALSE, NPS = TRUE) {
   #add in deprecation
   lifecycle::deprecate_soft(when = "0.1.5", "set_cui()", "set_cui_code()")
@@ -661,139 +660,145 @@ set_cui <- function(eml_object, cui_code = c("PUBLIC", "NOCON", "DL ONLY",
 #' \dontrun{
 #' eml_object <- set_cui_marking(eml_object, "PUBLIC")
 #' }
-set_cui_marking <- function (eml_object,
-                          cui_marking = c("PUBLIC",
-                                       "SP-NPSR",
-                                       "SP-HISTP",
-                                       "SP-ARCHR"),
+set_legal_authority <- function (eml_object,
+                          distribution = c("PUBLIC", "RESTRICTED"),
+                          legal_authority_id,
+                          contact_email,
+                          authority_designator,
                           force = FALSE,
                           NPS = TRUE) {
+  #test that distribution is either "PUBLIC" or "RESTRICTED"
+  distribution <- toupper(distribution)
+  distribution <- match.arg(distribution)
 
-  cui_marking <- toupper(cui_marking)
-  # verify CUI code entry; stop if does not equal one of six valid codes listed above:
-  cui_marking <- match.arg(cui_marking)
+  # test legal authority is numeric
+  if (!is.numeric(legal_authority_id)) {
+    if (is.numeric(!legal_authority_id)) {
+      cli::cli_abort(c(x = paste0("The legal_authority_id parameter ",
+                       "must be an integer between 1 and 31 (inclusive).")))
+    }
+  }
+  # test legal authority is an integer within correct range
+  if((!legal_authority_id %% 1 == 0) &&
+      legal_authority_id > 0 &&
+      legal_authority_id < 32) {
+    cli::cli_abort(c(x = paste0("The legal_authority_id parameter must ",
+                                "be an integer between 1 and 31 (inclusive).")))
+  }
+
+  # test for valid contact email format (approximate)
+  if (!grepl("^[[:alnum:].+_-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}$",
+             contact_email)) {
+    cli::cli_abort(c(x = paste0("The contact_email must be a valid ",
+                                "email address.")))
+  }
+
+  # use API to get legal authority information:
+  authorities <- NPSdatastore::get_legal_authority()
+  authority <- authorities[legal_authority_id,]
 
   # Generate new CUI element for additionalMetadata
-  my_cui <- list(metadata = list(CUImarking = cui_marking), id = "CUImarking")
+  if(distribution == "RESTRICTED") {
+    my_cui <- list(
+      metadata = list(
+        distribution = list(CUI = distribution,
+                            type = authority$type,
+                            label = authority$label,
+                            marking = authority$marking,
+                            contactEmail = contact_email,
+                            authorityDesignator = authority_designator,
+                            description = authority$description,
+                            onlineUrl = authority$information)),
+        id = "CUI") }
+  else {
+    my_cui <- list(
+      metadata = list(
+        distribution = list(CUI = distribution)), id = "CUI")
+        }
 
   # get existing additionalMetadata elements:
   add_meta <- eml_object$additionalMetadata
 
-  #get the location of CUI dissemination codes in additionalMetadata:
-  x <- NULL
-  for (i in 1:length(seq_along(add_meta))) {
-    if (names(add_meta[[i]][["metadata"]]) == "CUI") {
-      x <- i
-      break
-    }
+  #if no additional metadata at all....
+  if(is.null(add_meta)){
+    eml_object$additionalMetadata <- list(my_cui)
   }
+  if(!is.null(add_meta)){
 
-  #if no CUI dissemination code exit the function; warn if force == FALSE
-  if (is.null(x)) {
-    if (force == FALSE) {
-      cat("Your metadata does not contain a CUI dissemination code.")
-      cat("Use ",
-          crayon::bold$green("set_cui_code()"),
-          " to add a dissemination code to the metadata.",
-          sep = "")
-    }
-    return(invisible(eml_object))
-  }
+    #helps track lists of different lengths/hierarchies
+    x <- length(add_meta)
 
-  #get location of CUI marking codes in additionalMetadata:
-  y <- NULL
-  for (i in 1:length(seq_along(add_meta))) {
-    if(names(add_meta[[i]][["metadata"]]) == "CUImarking") {
-      y <- i
-      break
-    }
-  }
-
-  #if CUI marking already exists:
-  if (!is.null(y)) {
-    #get existing CUI marking:
-    existing_cui_marking <- add_meta[[y]][["metadata"]][["CUImarking"]]
-
-    #don't replace an existing CUI marking with the same marking
-    if (existing_cui_marking == cui_marking) {
-      if (force == FALSE) {
-        cat("Your metadata already have an existing CUI marking of ",
-            crayon::bold$blue(existing_cui_marking),
-            ".\n",
-            sep = "")
-        cat("Your metadata CUI marking was not updated.\n")
-      }
-      return(invisible(eml_object))
-    }
-
-  #if CUI markings already exist, ask if they should be replaced/changed?
-    if (force == FALSE) {
-      cat("Your metadata already contains the CUI marking: ",
-          crayon::blue$bold(existing_cui_marking),
-          ".\n",
-          sep = "")
-      cat("Are you sure you want to change it?\n")
-      var1 <- .get_user_input()
-      if (var1 == 2) {
-        cat("Your original CUI marking has been retained")
-        return(invisible(eml_object))
+    # Is CUI already specified?
+    # doesn't this overwrite the last additionalMetadata element rather than
+    # add another additinalMetadata element?
+    exist_cui <- NULL
+    for (i in seq_along(add_meta)) {
+      if (suppressWarnings(stringr::str_detect(add_meta[i], "CUI")) == TRUE) {
+        seq <- i
+        #handle legacy CUI:
+        exist_cui <- add_meta[[i]]$metadata$CUI
+        #handle current CUI
+        if (is.null(exist_cui)) {
+          exist_cui <- add_meta[[i]]$metadata$distribution$CUI
+        }
       }
     }
-  }
-  #extract CUI dissemination code
-  cui <- add_meta[[x]][["metadata"]][["CUI"]]
 
-  #test that cui code and cui marking are both public:
-  if (cui == "PUBLIC" & cui_marking != "PUBLIC") {
-    if (force == FALSE){
-      msg <- paste0("to choose a CUI marking that coincides",
-                    " with your CUI dissemination code or use ")
-      cat("Your CUI dissemination code is set to ", cui, ".\n", sep ="")
-      cat("The CUI dissemination code and CUI marking must coincide.\n")
-      cat("Use ",
-          crayon::green$bold("set_cui_marking() "),
-          msg,
-          crayon::green$bold("set_cui_code()"),
-          " to change your CUI dissemination code.\n", sep = "")
+    # scripting route:
+    # existence of strong_good implies the existence of strong_bad!
+    strong_good <<- cli::combine_ansi_styles("bold", "blue")
+    if (force == TRUE) {
+      # replace existing CuI element in additional_metadata
+      eml_object$additionalMetadata[[seq]] <- my_cui
     }
-    return(invisible(eml_object))
-  }
 
-  #test that if cui_code is not public, cui_marking is not public.
-  if (cui != "PUBLIC" & cui_marking == "PUBLIC") {
-    if (force == FALSE){
-      msg <- paste0("to choose a CUI marking that coincides",
-                    " with your CUI dissemination code or use ")
-      cat("Your CUI dissemination code is set to ", cui, ".\n", sep = "")
-      cat("The CUI dissemination code and CUI marking must coincide.\n")
-      cat("Use ",
-          crayon::green$bold("set_cui_marking() "),
-          msg,
-          crayon::green$bold("set_cui_code()"),
-          " to change your CUI dissemination code\n.", sep = "")
+    # interactive route:
+    if (force == FALSE) {
+      # If no existing CUI, add it in:
+      if (is.null(exist_cui)) {
+        # if only one element in additional metadata
+        if (x == 1) {
+          eml_object$additionalMetadata <- list(my_cui,
+                                                eml_object$additionalMetadata)
+        }
+        # if already multiple elements in additional metadata, requires
+        # extra nesting
+        if (x > 1) {
+          eml_object$additionalMetadata[[x + 1]] <- my_cui
+        }
+        cli::cli_inform(c(paste0("No previous CUI was detected. Your CUI info ",
+                                 "has been set to ",
+                                 strong_good("{distribution}"), " .")))
+        if (distribution == "RESTRICTED") {
+          cli::cli_inform(c(paste0("The CUI label has been set to ",
+                                   "{.strong {authority$label}} and ",
+                                   "the CUI marking has been set to ",
+                                   "{.strong {authority$marking}}.")))
+        }
+      }
+      # If existing CUI, stop.
+      if (!is.null(exist_cui)) {
+        cli::cli_inform(c(paste0("CUI has previously been specified as ",
+                                 strong_good("{exist_cui}"),
+                                 ". Would you like to update it?")))
+        var1 <- .get_user_input() #1 = yes, 2 = no
+        if (var1 == 1) {
+          eml_object$additionalMetadata[[seq]] <- my_cui
+          cli::cli_inform(c(paste0("Your CUI has been set to ",
+                                   strong_good("{distribution}"), ".")))
+          if (distribution == "RESTRICTED") {
+            cli::cli_inform(c(paste0("The CUI label has been set to ",
+                                     "{.strong {authority$label}} and ",
+                                     "the CUI marking has been set to ",
+                                     "{.strong {authority$marking}}.")))
+            }
+          }
+        if (var1 == 2) {
+          cat("Your original CUI info was retained")
+        }
+      }
     }
-    return(invisible(eml_object))
   }
-
-  # at this point cui_code and cui_marking coincide
-  # add cui_marking and put it back in additional metadata
-
-  # Generate new CUI element for additionalMetadata
-  my_cui <- list(metadata = list(CUImarking = cui_marking), id = "CUI marking")
-
-  # if there was no CUImarking, add one:
-  if (is.null(y)) {
-    x <- length(eml_object$additionalMetadata)
-    eml_object$additionalMetadata[[x + 1]] <- my_cui
-  } else {
-    #otherwise, overwrite the existing CUI marking:
-    eml_object[["additionalMetadata"]][[y]] <- my_cui
-  }
-
-  if (force == FALSE) {
-    cat("Your CUI marking has been set to ", crayon::blue$bold(cui_marking))
-  }
-
   # Set NPS publisher, if it doesn't already exist
   if (NPS == TRUE) {
     eml_object <- .set_npspublisher(eml_object)
@@ -803,7 +808,6 @@ set_cui_marking <- function (eml_object,
   eml_object <- .set_version(eml_object)
 
   return(eml_object)
-
 }
 
 #' adds DRR connection
