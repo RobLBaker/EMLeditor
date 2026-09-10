@@ -935,8 +935,8 @@ set_permissions <- function (eml_object,
         }
         cli::cli_inform(c(paste0("No previous permissions were detected. ",
                                  "Your permissions have been set to ",
-                                 .strong_good("{distribution}"), " .")))
-        if (distribution == "RESTRICTED") {
+                                 .strong_good("{access}"), " .")))
+        if (access == "RESTRICTED") {
           cli::cli_inform(c(paste0("The permissions have been set to ",
                                    "{.strong {authority$label}} and ",
                                    "the CUI marking has been set to ",
@@ -952,8 +952,8 @@ set_permissions <- function (eml_object,
         if (var1 == 1) {
           eml_object$additionalMetadata[[seq]] <- my_cui
           cli::cli_inform(c(paste0("Your permissions have been set to ",
-                                   strong_good("{distribution}"), ".")))
-          if (stringr::str_detect(distribution, "RESTRICTED|INTERNAL")) {
+                                   .strong_good("{access}"), ".")))
+          if (stringr::str_detect(access, "RESTRICTED|INTERNAL")) {
             cli::cli_inform(c(paste0("The CUI label has been set to ",
                                      "{.strong {authority$label}} and ",
                                      "the CUI marking has been set to ",
