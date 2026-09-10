@@ -635,8 +635,9 @@ set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
 }
 
 
-
-#' For more information on CUI markings, please visit the [CUI Markings](https://www.archives.gov/cui/registry/category-marking-list) list maintained by the National Archives.
+#' Adds information about file access permission levels.
+#'
+#' @details These permissions are only for file download access (including the EML metadata in .xml format). The actual reference landing page will not be restricted. For more information on CUI markings, please visit the [CUI Markings](https://www.archives.gov/cui/registry/category-marking-list) list maintained by the National Archives. For a list of legal authorities, use `NPSdatastore::get_legal_authority`.
 #'
 #' @inheritParams set_title
 #' @param access String. one of either "PUBLIC", "RESTRICTED", or "INTERNAL".
@@ -649,15 +650,15 @@ set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
 #'
 #' @examples
 #' \dontrun{
-#' eml_object <- set_cui_marking(eml_object, "PUBLIC")
+#' eml_object <- set_permissions(eml_object, "PUBLIC")
 #' }
-set_legal_authority <- function (eml_object,
-                          access = c("PUBLIC", "RESTRICTED", "INTERNAL"),
-                          legal_authority_id = NULL,
-                          contact_email = NULL,
-                          authority_designator = NULL,
-                          force = FALSE,
-                          NPS = TRUE) {
+set_permissions <- function (eml_object,
+                             access = c("PUBLIC", "RESTRICTED", "INTERNAL"),
+                             legal_authority_id = NULL,
+                             contact_email = NULL,
+                             authority_designator = NULL,
+                             force = FALSE,
+                             NPS = TRUE) {
   #test that access is either "PUBLIC", "RESTRICTED", or "INTERNAL"
   access <- toupper(access)
   access <- match.arg(access)
