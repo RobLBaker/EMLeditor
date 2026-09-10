@@ -50,7 +50,8 @@ globalVariables(c("UnitCode",
                   "unit",
                   "formatString",
                   "attributeDefinition",
-                  "distribution"
+                  "distribution",
+                  "strong_good"
                   ))
 
 
