@@ -634,24 +634,15 @@ set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
   return(eml_object)
 }
 
-#' The function sets the CUI marking for the data package
-#'
-#' @description `r lifecycle::badge("experimental")`
-#' The Controlled Unclassified Information (CUI) marking is different from the CUI dissemination code. The CUI dissemination code (set `set_cui_code()`) sets who can have access to the data package. The CUI marking set by `set_cui_marking()` specifies the reason (if any) that the data are being restricted.
-#' If the CUI dissemination code is set to PUBLIC, the CUI marking must also be PUBLIC.
-#' If the CUI dissemination code is set to anything other than PUBLIC, the CUI marking must be set to SP-NPSR, SP-HISTP or SP-ARCHR.
-#'
-#' @details CUI markings are the legal justification for why data are being restricted from the public. If data contain no CUI, the CUI marking must be set to PUBLIC (and the CUI dissemination code must be set to PUBLIC and the license must be set to CC0 or Public Domain). If the data contain CUI (i.e. the CUI dissemination code is not PUBLIC), you must use the CUI marking to provide a legal justification for why the data are restricted. Only one CUI marking can be applied. At NPS, the following markings are available:
-#'
-#' PUBLIC: The data contain no CUI, dissemination is not restricted.
-#' SP-NPSR: "National Park System Resources" - This material contains information concerning the nature and specific location of a National Park System resource that is endangered, threatened, rare, or commercially valuable, of mineral or paleontological objects within System units, or of objects of cultural patrimony within System units.
-#' SP-HISTP: "Historic Properties" - This material contains information related to the location, character, or ownership of historic property.
-#' SP-ARCHR: "Archaeological Resources" - This material contains information related to information about the nature and location of any archaeological resource for which the excavation or removal requires a permit or other permission.
-#'
+
+
 #' For more information on CUI markings, please visit the [CUI Markings](https://www.archives.gov/cui/registry/category-marking-list) list maintained by the National Archives.
 #'
 #' @inheritParams set_title
-#' @param cui_marking String. One of four options, "PUBLIC", "SP-NPSR", "SP-HISTP" or "SP-ARCHR" are available.
+#' @param access String. one of either "PUBLIC", "RESTRICTED", or "INTERNAL".
+#' @param legal_authority. Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be ste to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use `NPSdatastore::get_legal_authority` to generate a list along with definitions.
+#' @param contact_email. String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, an email address must be supplied. It will be used to request more information about a restricted source. It is suggested that this be a group email rather than an individual due to potential staff turnover.
+#' @param authority_designator String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, the name of the person who is responsible for restricting the files attached to the reference.
 #'
 #' @return an EML-formatted R object
 #' @export
@@ -661,47 +652,46 @@ set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
 #' eml_object <- set_cui_marking(eml_object, "PUBLIC")
 #' }
 set_legal_authority <- function (eml_object,
-                          distribution = c("PUBLIC", "RESTRICTED"),
-                          legal_authority_id,
-                          contact_email,
-                          authority_designator,
+                          access = c("PUBLIC", "RESTRICTED", "INTERNAL"),
+                          legal_authority_id = NULL,
+                          contact_email = NULL,
+                          authority_designator = NULL,
                           force = FALSE,
                           NPS = TRUE) {
-  #test that distribution is either "PUBLIC" or "RESTRICTED"
-  distribution <- toupper(distribution)
-  distribution <- match.arg(distribution)
+  #test that access is either "PUBLIC", "RESTRICTED", or "INTERNAL"
+  access <- toupper(access)
+  access <- match.arg(access)
 
-  # test legal authority is numeric
-  if (!is.numeric(legal_authority_id)) {
-    if (is.numeric(!legal_authority_id)) {
-      cli::cli_abort(c(x = paste0("The legal_authority_id parameter ",
-                       "must be an integer between 1 and 31 (inclusive).")))
+  if (!access == "PUBLIC") {
+    # test legal authority is numeric
+    if (!is.numeric(legal_authority_id)) {
+      if (is.numeric(!legal_authority_id)) {
+        cli::cli_abort(c(x = paste0("The legal_authority_id parameter ",
+                         "must be an integer between 1 and 31 (inclusive).")))
+      }
     }
-  }
-  # test legal authority is an integer within correct range
-  if((!legal_authority_id %% 1 == 0) &&
-      legal_authority_id > 0 &&
-      legal_authority_id < 32) {
-    cli::cli_abort(c(x = paste0("The legal_authority_id parameter must ",
-                                "be an integer between 1 and 31 (inclusive).")))
-  }
+    # test legal authority is an integer within correct range
+    if((!legal_authority_id %% 1 == 0) &&
+        legal_authority_id > 0 &&
+        legal_authority_id < 32) {
+      cli::cli_abort(c(x = paste0("The legal_authority_id parameter must be ",
+                                  "an integer between 1 and 31 (inclusive).")))
+    }
 
-  # test for valid contact email format (approximate)
-  if (!grepl("^[[:alnum:].+_-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}$",
-             contact_email)) {
-    cli::cli_abort(c(x = paste0("The contact_email must be a valid ",
-                                "email address.")))
-  }
+    # test for valid contact email format (approximate)
+    if (!grepl("^[[:alnum:].+_-]+@[[:alnum:].-]+\\.[[:alpha:]]{2,}$",
+               contact_email)) {
+      cli::cli_abort(c(x = paste0("The contact_email must be a valid ",
+                                  "email address.")))
+    }
 
-  # use API to get legal authority information:
-  authorities <- NPSdatastore::get_legal_authority()
-  authority <- authorities[legal_authority_id,]
+    # use API to get legal authority information:
+    authorities <- NPSdatastore::get_legal_authority()
+    authority <- authorities[legal_authority_id,]
 
-  # Generate new CUI element for additionalMetadata
-  if(distribution == "RESTRICTED") {
     my_cui <- list(
       metadata = list(
-        distribution = list(CUI = distribution,
+        distribution = list(accessLevel = access,
                             type = authority$type,
                             label = authority$label,
                             marking = authority$marking,
@@ -709,18 +699,19 @@ set_legal_authority <- function (eml_object,
                             authorityDesignator = authority_designator,
                             description = authority$description,
                             onlineUrl = authority$information)),
-        id = "CUI") }
+      id = "permissions")
+  }
   else {
     my_cui <- list(
       metadata = list(
-        distribution = list(CUI = distribution)), id = "CUI")
-        }
+        distribution = list(access_level = access)), id = "permissions")
+  }
 
   # get existing additionalMetadata elements:
   add_meta <- eml_object$additionalMetadata
 
   #if no additional metadata at all....
-  if(is.null(add_meta)){
+  if (is.null(add_meta)) {
     eml_object$additionalMetadata <- list(my_cui)
   }
   if(!is.null(add_meta)){
@@ -728,18 +719,17 @@ set_legal_authority <- function (eml_object,
     #helps track lists of different lengths/hierarchies
     x <- length(add_meta)
 
-    # Is CUI already specified?
-    # doesn't this overwrite the last additionalMetadata element rather than
-    # add another additinalMetadata element?
+    # Is CUI already specified in the old context of CUI
     exist_cui <- NULL
     for (i in seq_along(add_meta)) {
-      if (suppressWarnings(stringr::str_detect(add_meta[i], "CUI")) == TRUE) {
+      if (suppressWarnings(stringr::str_detect(add_meta[i],
+                                               "CUI|accessLevel")) == TRUE) {
         seq <- i
         #handle legacy CUI:
         exist_cui <- add_meta[[i]]$metadata$CUI
         #handle current CUI
         if (is.null(exist_cui)) {
-          exist_cui <- add_meta[[i]]$metadata$distribution$CUI
+          exist_cui <- add_meta[[i]]$metadata$distribution$accessLevel
         }
       }
     }
@@ -766,11 +756,11 @@ set_legal_authority <- function (eml_object,
         if (x > 1) {
           eml_object$additionalMetadata[[x + 1]] <- my_cui
         }
-        cli::cli_inform(c(paste0("No previous CUI was detected. Your CUI info ",
-                                 "has been set to ",
+        cli::cli_inform(c(paste0("No previous permissions were detected. ",
+                                 "Your permissions have been set to ",
                                  strong_good("{distribution}"), " .")))
         if (distribution == "RESTRICTED") {
-          cli::cli_inform(c(paste0("The CUI label has been set to ",
+          cli::cli_inform(c(paste0("The permissions have been set to ",
                                    "{.strong {authority$label}} and ",
                                    "the CUI marking has been set to ",
                                    "{.strong {authority$marking}}.")))
@@ -778,15 +768,15 @@ set_legal_authority <- function (eml_object,
       }
       # If existing CUI, stop.
       if (!is.null(exist_cui)) {
-        cli::cli_inform(c(paste0("CUI has previously been specified as ",
+        cli::cli_inform(c(paste0("Permission were previously specified as ",
                                  strong_good("{exist_cui}"),
                                  ". Would you like to update it?")))
         var1 <- .get_user_input() #1 = yes, 2 = no
         if (var1 == 1) {
           eml_object$additionalMetadata[[seq]] <- my_cui
-          cli::cli_inform(c(paste0("Your CUI has been set to ",
+          cli::cli_inform(c(paste0("Your permissions have been set to ",
                                    strong_good("{distribution}"), ".")))
-          if (distribution == "RESTRICTED") {
+          if (stringr::str_detect(distribution, "RESTRICTED|INTERNAL")) {
             cli::cli_inform(c(paste0("The CUI label has been set to ",
                                      "{.strong {authority$label}} and ",
                                      "the CUI marking has been set to ",
@@ -794,7 +784,7 @@ set_legal_authority <- function (eml_object,
             }
           }
         if (var1 == 2) {
-          cat("Your original CUI info was retained")
+          cat("Your original permissions info was retained")
         }
       }
     }
