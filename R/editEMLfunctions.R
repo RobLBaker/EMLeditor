@@ -634,6 +634,177 @@ set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
   return(eml_object)
 }
 
+#' The function sets the CUI marking for the data package
+#'
+#' @description `r lifecycle::badge("experimental")`
+#' The Controlled Unclassified Information (CUI) marking is different from the CUI dissemination code. The CUI dissemination code (set `set_cui_code()`) sets who can have access to the data package. The CUI marking set by `set_cui_marking()` specifies the reason (if any) that the data are being restricted.
+#' If the CUI dissemination code is set to PUBLIC, the CUI marking must also be PUBLIC.
+#' If the CUI dissemination code is set to anything other than PUBLIC, the CUI marking must be set to SP-NPSR, SP-HISTP or SP-ARCHR.
+#'
+#' @details CUI markings are the legal justification for why data are being restricted from the public. If data contain no CUI, the CUI marking must be set to PUBLIC (and the CUI dissemination code must be set to PUBLIC and the license must be set to CC0 or Public Domain). If the data contain CUI (i.e. the CUI dissemination code is not PUBLIC), you must use the CUI marking to provide a legal justification for why the data are restricted. Only one CUI marking can be applied. At NPS, the following markings are available:
+#'
+#' PUBLIC: The data contain no CUI, dissemination is not restricted.
+#' SP-NPSR: "National Park System Resources" - This material contains information concerning the nature and specific location of a National Park System resource that is endangered, threatened, rare, or commercially valuable, of mineral or paleontological objects within System units, or of objects of cultural patrimony within System units.
+#' SP-HISTP: "Historic Properties" - This material contains information related to the location, character, or ownership of historic property.
+#' SP-ARCHR: "Archaeological Resources" - This material contains information related to information about the nature and location of any archaeological resource for which the excavation or removal requires a permit or other permission.
+#'
+#' For more information on CUI markings, please visit the [CUI Markings](https://www.archives.gov/cui/registry/category-marking-list) list maintained by the National Archives.
+#'
+#' @inheritParams set_title
+#' @param cui_marking String. One of four options, "PUBLIC", "SP-NPSR", "SP-HISTP" or "SP-ARCHR" are available.
+#'
+#' @return an EML-formatted R object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' eml_object <- set_cui_marking(eml_object, "PUBLIC")
+#' }
+set_cui_marking <- function (eml_object,
+                             cui_marking = c("PUBLIC",
+                                             "SP-NPSR",
+                                             "SP-HISTP",
+                                             "SP-ARCHR"),
+                             force = FALSE,
+                             NPS = TRUE) {
+
+  cui_marking <- toupper(cui_marking)
+  # verify CUI code entry; stop if does not equal one of six valid codes listed above:
+  cui_marking <- match.arg(cui_marking)
+
+  # Generate new CUI element for additionalMetadata
+  my_cui <- list(metadata = list(CUImarking = cui_marking), id = "CUImarking")
+
+  # get existing additionalMetadata elements:
+  add_meta <- eml_object$additionalMetadata
+
+  #get the location of CUI dissemination codes in additionalMetadata:
+  x <- NULL
+  for (i in 1:length(seq_along(add_meta))) {
+    if (names(add_meta[[i]][["metadata"]]) == "CUI") {
+      x <- i
+      break
+    }
+  }
+
+  #if no CUI dissemination code exit the function; warn if force == FALSE
+  if (is.null(x)) {
+    if (force == FALSE) {
+      cat("Your metadata does not contain a CUI dissemination code.")
+      cat("Use ",
+          crayon::bold$green("set_cui_code()"),
+          " to add a dissemination code to the metadata.",
+          sep = "")
+    }
+    return(invisible(eml_object))
+  }
+
+  #get location of CUI marking codes in additionalMetadata:
+  y <- NULL
+  for (i in 1:length(seq_along(add_meta))) {
+    if(names(add_meta[[i]][["metadata"]]) == "CUImarking") {
+      y <- i
+      break
+    }
+  }
+
+  #if CUI marking already exists:
+  if (!is.null(y)) {
+    #get existing CUI marking:
+    existing_cui_marking <- add_meta[[y]][["metadata"]][["CUImarking"]]
+
+    #don't replace an existing CUI marking with the same marking
+    if (existing_cui_marking == cui_marking) {
+      if (force == FALSE) {
+        cat("Your metadata already have an existing CUI marking of ",
+            crayon::bold$blue(existing_cui_marking),
+            ".\n",
+            sep = "")
+        cat("Your metadata CUI marking was not updated.\n")
+      }
+      return(invisible(eml_object))
+    }
+
+    #if CUI markings already exist, ask if they should be replaced/changed?
+    if (force == FALSE) {
+      cat("Your metadata already contains the CUI marking: ",
+          crayon::blue$bold(existing_cui_marking),
+          ".\n",
+          sep = "")
+      cat("Are you sure you want to change it?\n")
+      var1 <- .get_user_input()
+      if (var1 == 2) {
+        cat("Your original CUI marking has been retained")
+        return(invisible(eml_object))
+      }
+    }
+  }
+  #extract CUI dissemination code
+  cui <- add_meta[[x]][["metadata"]][["CUI"]]
+
+  #test that cui code and cui marking are both public:
+  if (cui == "PUBLIC" & cui_marking != "PUBLIC") {
+    if (force == FALSE){
+      msg <- paste0("to choose a CUI marking that coincides",
+                    " with your CUI dissemination code or use ")
+      cat("Your CUI dissemination code is set to ", cui, ".\n", sep ="")
+      cat("The CUI dissemination code and CUI marking must coincide.\n")
+      cat("Use ",
+          crayon::green$bold("set_cui_marking() "),
+          msg,
+          crayon::green$bold("set_cui_code()"),
+          " to change your CUI dissemination code.\n", sep = "")
+    }
+    return(invisible(eml_object))
+  }
+
+  #test that if cui_code is not public, cui_marking is not public.
+  if (cui != "PUBLIC" & cui_marking == "PUBLIC") {
+    if (force == FALSE){
+      msg <- paste0("to choose a CUI marking that coincides",
+                    " with your CUI dissemination code or use ")
+      cat("Your CUI dissemination code is set to ", cui, ".\n", sep = "")
+      cat("The CUI dissemination code and CUI marking must coincide.\n")
+      cat("Use ",
+          crayon::green$bold("set_cui_marking() "),
+          msg,
+          crayon::green$bold("set_cui_code()"),
+          " to change your CUI dissemination code\n.", sep = "")
+    }
+    return(invisible(eml_object))
+  }
+
+  # at this point cui_code and cui_marking coincide
+  # add cui_marking and put it back in additional metadata
+
+  # Generate new CUI element for additionalMetadata
+  my_cui <- list(metadata = list(CUImarking = cui_marking), id = "CUI marking")
+
+  # if there was no CUImarking, add one:
+  if (is.null(y)) {
+    x <- length(eml_object$additionalMetadata)
+    eml_object$additionalMetadata[[x + 1]] <- my_cui
+  } else {
+    #otherwise, overwrite the existing CUI marking:
+    eml_object[["additionalMetadata"]][[y]] <- my_cui
+  }
+
+  if (force == FALSE) {
+    cat("Your CUI marking has been set to ", crayon::blue$bold(cui_marking))
+  }
+
+  # Set NPS publisher, if it doesn't already exist
+  if (NPS == TRUE) {
+    eml_object <- .set_npspublisher(eml_object)
+  }
+
+  # add/updated EMLeditor and version to metadata:
+  eml_object <- .set_version(eml_object)
+
+  return(eml_object)
+
+}
+
 
 #' Adds information about file access permission levels.
 #'
