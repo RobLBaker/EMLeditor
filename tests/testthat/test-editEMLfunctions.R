@@ -347,6 +347,15 @@ test_that("set_cui_marking doesn't update with identical informatin", {
   expect_equal(x, "Your CUI marking is set to PUBLIC. This means the data do not contain CUI.")
 })
 
+# ----- test set_permissions -----
+
+test_that("set_permissions does not accept invalid input for access", {
+  expect_error(new_meta <- set_permissions(BICY_EMLed_meta,
+                              access = "SENSITIVE"))
+})
+
+
+
 # ----- test set_drr -----
 
 test_that("set_drr returns valid metadata", {
