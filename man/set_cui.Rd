@@ -6,7 +6,7 @@
 \usage{
 set_cui(
   eml_object,
-  cui_code = c("PUBLIC", "RESTRICTED"),
+  cui_code = c("PUBLIC", "NOCON", "DL ONLY", "FEDCON", "FED ONLY"),
   force = FALSE,
   NPS = TRUE
 )
