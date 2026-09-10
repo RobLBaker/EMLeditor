@@ -553,8 +553,14 @@ set_cui_code <- function(eml_object,
 #' \dontrun{
 #' set_cui(eml_object, "PUBFUL")
 #' }
-set_cui <- function(eml_object, cui_code = c("PUBLIC", "RESTRICTED"),
-                    force = FALSE, NPS = TRUE) {
+set_cui <- function(eml_object,
+                    cui_code = c("PUBLIC",
+                                 "NOCON",
+                                 "DL ONLY",
+                                 "FEDCON",
+                                 "FED ONLY"),
+                    force = FALSE,
+                    NPS = TRUE) {
   #add in deprecation
   lifecycle::deprecate_soft(when = "0.1.5", "set_cui()", "set_cui_code()")
 
@@ -812,8 +818,8 @@ set_cui_marking <- function (eml_object,
 #'
 #' @inheritParams set_title
 #' @param access String. one of either "PUBLIC", "RESTRICTED", or "INTERNAL".
-#' @param legal_authority. Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be ste to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use `NPSdatastore::get_legal_authority` to generate a list along with definitions.
-#' @param contact_email. String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, an email address must be supplied. It will be used to request more information about a restricted source. It is suggested that this be a group email rather than an individual due to potential staff turnover.
+#' @param legal_authority_id Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be ste to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use `NPSdatastore::get_legal_authority` to generate a list along with definitions.
+#' @param contact_email String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, an email address must be supplied. It will be used to request more information about a restricted source. It is suggested that this be a group email rather than an individual due to potential staff turnover.
 #' @param authority_designator String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, the name of the person who is responsible for restricting the files attached to the reference.
 #'
 #' @return an EML-formatted R object
@@ -908,7 +914,6 @@ set_permissions <- function (eml_object,
 
     # scripting route:
     # existence of strong_good implies the existence of strong_bad!
-    strong_good <<- cli::combine_ansi_styles("bold", "blue")
     if (force == TRUE) {
       # replace existing CuI element in additional_metadata
       eml_object$additionalMetadata[[seq]] <- my_cui
@@ -930,7 +935,7 @@ set_permissions <- function (eml_object,
         }
         cli::cli_inform(c(paste0("No previous permissions were detected. ",
                                  "Your permissions have been set to ",
-                                 strong_good("{distribution}"), " .")))
+                                 .strong_good("{distribution}"), " .")))
         if (distribution == "RESTRICTED") {
           cli::cli_inform(c(paste0("The permissions have been set to ",
                                    "{.strong {authority$label}} and ",
@@ -941,7 +946,7 @@ set_permissions <- function (eml_object,
       # If existing CUI, stop.
       if (!is.null(exist_cui)) {
         cli::cli_inform(c(paste0("Permission were previously specified as ",
-                                 strong_good("{exist_cui}"),
+                                 .strong_good("{exist_cui}"),
                                  ". Would you like to update it?")))
         var1 <- .get_user_input() #1 = yes, 2 = no
         if (var1 == 1) {
