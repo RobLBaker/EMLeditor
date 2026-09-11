@@ -332,4 +332,4 @@ globalVariables(c("UnitCode",
 
 
 #Call .strong_good for bold, blue font in cli messages
-.strong_good <- cli::combine_ansi_styles("bold", "blue")
+.strong_good <- function(x) crayon::bold(crayon::blue(x))
