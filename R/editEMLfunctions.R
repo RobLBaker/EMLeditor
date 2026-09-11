@@ -933,9 +933,9 @@ set_permissions <- function (eml_object,
         if (x > 1) {
           eml_object$additionalMetadata[[x + 1]] <- my_cui
         }
-        cli::cli_inform(c(paste0("No previous permissions were detected. ",
-                                 "Your permissions have been set to ",
-                                 .strong_good("{access}"), " .")))
+        cli::cli_inform(paste0("No previous permissions were detected. ",
+                               "Your permissions have been set to ",
+                               .strong_good(access), "."))
         if (access == "RESTRICTED") {
           cli::cli_inform(c(paste0("The permissions have been set to ",
                                    "{.strong {authority$label}} and ",
@@ -945,14 +945,14 @@ set_permissions <- function (eml_object,
       }
       # If existing CUI, stop.
       if (!is.null(exist_cui)) {
-        cli::cli_inform(c(paste0("Permission were previously specified as ",
-                                 .strong_good("{exist_cui}"),
-                                 ". Would you like to update it?")))
+        cli::cli_inform(paste0("Permission were previously specified as ",
+                        .strong_good(exist_cui),
+                        ". Would you like to update it?"))
         var1 <- .get_user_input() #1 = yes, 2 = no
         if (var1 == 1) {
           eml_object$additionalMetadata[[seq]] <- my_cui
-          cli::cli_inform(c(paste0("Your permissions have been set to ",
-                                   .strong_good("{access}"), ".")))
+          cli::cli_inform(paste0("Your permissions have been set to ",
+                                 .strong_good(access), "."))
           if (stringr::str_detect(access, "RESTRICTED|INTERNAL")) {
             cli::cli_inform(c(paste0("The CUI label has been set to ",
                                      "{.strong {authority$label}} and ",
