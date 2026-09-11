@@ -226,7 +226,7 @@ You can choose from one of three file restriction levels: "PUBLIC", "INTERNAL" o
 
 You must also select a justification for choosing INTERNAL or RESTRICTED. These are codes from 1-32 (inclusive). The full list of codes and their justifications can be accessed using `NPSdatastore::get_legal_authority`
 
-If you choose INTERNAL or RESTRICTED you must also supply a contact email address for people who want to request access (we suggest a group email rather than in individual person's email) and a specific person's name who is responsible for making the decision to restrict the file downloads.
+If you choose INTERNAL or RESTRICTED you must also supply a contact email address for people who want to request access (we suggest a group email rather than in individual person's email due to frequent personnel turnover) and a specific person's name who is responsible for making the decision to restrict the file downloads.
 
 ```{r cui_dissemination}
 # For public references:
@@ -236,7 +236,7 @@ my_metadata <- EMLeditor::set_permissions(my_metadata, "PUBLIC")
 my_metadata <- EMLeditor::set_permissions(my_metadata, 
                                           access = "INTERNAL",
                                           legal_authority_id = 1,
-                                          contact_email = "my_network_email@nps.gov",
+                                          contact_email = "network_email@nps.gov",
                                           authority_designator = "Edward Abbey")
 
 ```
