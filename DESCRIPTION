@@ -20,7 +20,7 @@ BugReports: https://github.com/doi-NPS/EMLeditor/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Remotes: 
-    github::doi-nps/QCkit
+    github::doi-nps/QCkit,
     github::doi-nps/NPSdatastore
 Imports: 
     httr,
