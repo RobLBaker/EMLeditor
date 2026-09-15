@@ -347,6 +347,31 @@ test_that("set_cui_marking doesn't update with identical informatin", {
   expect_equal(x, "Your CUI marking is set to PUBLIC. This means the data do not contain CUI.")
 })
 
+# ----- test set_permissions -----
+
+test_that("set_permissions does not accept invalid input for access", {
+  expect_error(new_meta <- set_permissions(BICY_EMLed_meta,
+                              access = "SENSITIVE"))
+})
+
+test_that("set_permisssions does not update when requested not to", {
+  return_val_2 <- function() {2}
+  local({mockr::local_mock(.get_user_input = return_val_2)
+    new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
+    expect_equal(suppressWarnings(get_cui(BICY_EMLed_meta)),
+                 suppressWarnings(get_cui(new_meta)))
+  })
+})
+
+test_that("set_permissions updates when requested to, public", {
+  return_val_1 <- function() {1}
+  local({mockr::local_mock(.get_user_input = return_val_1)
+        new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
+        expect_equal(new_meta[["additionalMetadata"]][[4]][["metadata"]]
+                     [["distribution"]][["access_level"]], "PUBLIC")
+  })
+})
+
 # ----- test set_drr -----
 
 test_that("set_drr returns valid metadata", {

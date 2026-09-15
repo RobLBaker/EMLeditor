@@ -49,7 +49,9 @@ globalVariables(c("UnitCode",
                   "definition",
                   "unit",
                   "formatString",
-                  "attributeDefinition"
+                  "attributeDefinition",
+                  "distribution",
+                  "strong_good"
                   ))
 
 
@@ -327,3 +329,7 @@ globalVariables(c("UnitCode",
   if (NPS) eml_object <- .set_npspublisher(eml_object)
   .set_version(eml_object)
 }
+
+
+#Call .strong_good for bold, blue font in cli messages
+.strong_good <- function(x) crayon::bold(crayon::blue(x))
