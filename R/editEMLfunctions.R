@@ -899,6 +899,7 @@ set_permissions <- function (eml_object,
 
     # Is CUI already specified in the old context of CUI
     exist_cui <- NULL
+    seq <- NULL
     for (i in seq_along(add_meta)) {
       if (suppressWarnings(stringr::str_detect(add_meta[i],
                                                "CUI|accessLevel")) == TRUE) {
@@ -915,8 +916,20 @@ set_permissions <- function (eml_object,
     # scripting route:
     # existence of strong_good implies the existence of strong_bad!
     if (force == TRUE) {
+      if (is.null(seq)) {
+        if (x == 1) {
+          eml_object$additionalMetadata <- list(my_cui,
+                                                eml_object$additionalMetadata)
+        }
+        # if already multiple elements in additional metadata, requires
+        # extra nesting
+        if (x > 1) {
+          eml_object$additionalMetadata[[x + 1]] <- my_cui
+        }
+      } else {
       # replace existing CuI element in additional_metadata
       eml_object$additionalMetadata[[seq]] <- my_cui
+      }
     }
 
     # interactive route:
