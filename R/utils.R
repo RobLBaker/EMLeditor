@@ -333,3 +333,43 @@ globalVariables(c("UnitCode",
 
 #Call .strong_good for bold, blue font in cli messages
 .strong_good <- function(x) crayon::bold(crayon::blue(x))
+
+
+#' Build access component of EML
+#'
+#' @inheritParams set_permissions
+#'
+#' @returns acc
+#' @noRd
+#'
+#' @examples
+#' \dontrun{
+#' .build_access("PUBLIC")
+#' .build_access("INTERNAL", "edward_abbey@nps.gov")}
+.build_access <- function(access, contact_email = NULL) {
+  if (access == "PUBLIC") {
+    list(
+      allow = list(
+        principal = "public",
+        permission = "read"
+      ),
+      order = "allowFirst",
+      scope = "document",
+      authSystem = "https://www.nps.gov"
+    )
+  } else {
+    # RESTRICTED or INTERNAL: deny public read.
+    # No <allow> block — contact_email/authority info belongs in
+    # additionalMetadata, not in access, and including an allow here would
+    # misleadingly imply a specific grant of access via this record.
+    list(
+      deny = list(
+        principal = "public",
+        permission = "read"
+      ),
+      order = "denyFirst",
+      scope = "document",
+      authSystem = "https://www.nps.gov"
+    )
+  }
+}
