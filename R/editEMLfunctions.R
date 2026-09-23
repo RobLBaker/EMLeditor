@@ -818,7 +818,7 @@ set_cui_marking <- function (eml_object,
 #'
 #' @inheritParams set_title
 #' @param access String. one of either "PUBLIC", "RESTRICTED", or "INTERNAL".
-#' @param legal_authority_id Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be ste to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use `NPSdatastore::get_legal_authority` to generate a list along with definitions.
+#' @param legal_authority_id Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be set to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use `NPSdatastore::get_legal_authority` to generate a list along with definitions.
 #' @param contact_email String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, an email address must be supplied. It will be used to request more information about a restricted source. It is suggested that this be a group email rather than an individual due to potential staff turnover.
 #' @param authority_designator String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, the name of the person who is responsible for restricting the files attached to the reference.
 #'
@@ -2459,13 +2459,31 @@ set_int_rights <- function(eml_object,
   restrict <- "This product has been determined to contain Controlled Unclassified Information (CUI) or to be otherwise restricted by the National Park Service, and is intended for specific purposes. It is not published under an open license. Unauthorized access, use, and distribution are prohibited."
 
   # get CUI info from additionalMetadata:
-  cui <- eml_object$additionalMetadata
-  cui2 <- NULL #record CUI dissemination code
-  for(i in seq_along(cui)){
-    if("CUI" %in% names(cui[[i]][["metadata"]])){
-      cui2 <- cui[[i]][["metadata"]][["CUI"]]
+  .find_existing_cui <- function(add_meta) {
+    found <- NULL
+    for (i in seq_along(add_meta)) {
+      entry_meta <- add_meta[[i]][["metadata"]]
+      # legacy CUI key
+      if ("CUI" %in% names(entry_meta)) {
+        found <- entry_meta[["CUI"]]
+      }
+      # current key, non-PUBLIC access (set_permissions()'s naming)
+      if (!is.null(entry_meta[["distribution"]][["accessLevel"]])) {
+        found <- entry_meta[["distribution"]][["accessLevel"]]
+      }
+      # current key, PUBLIC access (set_permissions() uses different
+      # casing for this specific case - see note above)
+      if (!is.null(entry_meta[["distribution"]][["access_level"]])) {
+        found <- entry_meta[["distribution"]][["access_level"]]
+      }
     }
+    found
   }
+
+  # get CUI info from additionalMetadata:
+  cui <- eml_object$additionalMetadata
+  cui2 <- .find_existing_cui(cui)
+
   # Verbose option with feedback:
   if(force == FALSE){
     # enforce CUI info prior to setting license:
@@ -2498,7 +2516,7 @@ set_int_rights <- function(eml_object,
         if(cui2 != "PUBLIC"){
           cat("Your CUI is set to ", crayon::blue$bold(cui2), ".")
           writeLines(paste0("To use a CC0 or public domain license",
-                       " your CUI must be PUBLIC."))
+                            " your CUI must be PUBLIC."))
           cat("Use", crayon::bold$green("set_cui()"), "to change your CUI.")
         }
       }
@@ -2523,21 +2541,17 @@ set_int_rights <- function(eml_object,
   #silent option for scripting:
   if(force == TRUE){
     #if no CUI specified, stop.
+
     if(is.null(cui2)){
-      return()
+      cli::cli_abort(c(x = paste0(
+        "No CUI/access-level information found on eml_object. ",
+        "set_permissions() must be called before set_int_rights() ",
+        "when force = TRUE."
+      )))
     }
 
     #if CUI has been specified:
     if(!is.null(cui2)){
-      # retrieve just the cell containing the CUI code:
-      # get CUI info from additionalMetadata:
-      cui <- eml_object$additionalMetadata
-      cui2 <- NULL #record CUI dissemination code
-      for(i in seq_along(cui)){
-        if("CUI" %in% names(cui[[i]][["metadata"]])){
-          cui2 <- cui[[i]][["metadata"]][["CUI"]]
-        }
-      }
 
       if(license == "CC0" || license == "public"){
         if(cui2 == "PUBLIC"){
@@ -2549,7 +2563,7 @@ set_int_rights <- function(eml_object,
           }
         }
         if(cui2 != "PUBLIC"){
-         return()
+          return()
         }
       }
       if(license == "restricted"){
