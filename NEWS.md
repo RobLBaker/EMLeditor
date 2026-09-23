@@ -1,4 +1,8 @@
 # EMLeditor v1.2.1 (Development version)
+## 2026-09-22
+  * Bug fix for `set_int_rights` when force == TRUE
+  * Bug fix for `set_permissions` when force == TRUE
+
 ## 2026-09-02
   * Bug fix for `set_cross_references`. Make sure cross reference URL is added to metadata!
 
