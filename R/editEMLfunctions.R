@@ -814,7 +814,10 @@ set_cui_marking <- function (eml_object,
 
 #' Adds information about file access permission levels.
 #'
-#' @details These permissions are only for file download access (including the EML metadata in .xml format). The actual reference landing page will not be restricted. For more information on CUI markings, please visit the [CUI Markings](https://www.archives.gov/cui/registry/category-marking-list) list maintained by the National Archives. For a list of legal authorities, use `NPSdatastore::get_legal_authority`.
+#' @description These permissions are only for file download access (including the EML metadata in .xml format). The actual reference landing page will not be restricted. For more information on CUI markings, please visit the [CUI Markings](https://www.archives.gov/cui/registry/category-marking-list) list maintained by the National Archives. For a list of legal authorities, use `NPSdatastore::get_legal_authority`.
+#'
+#' @details The details for the data package restriction (or public access), including the reason, the level, and the CUI code and links to relevant documentation, email addresses for contact and a person responsible for the decision will all be populated in a dedicated additionalMetadata element. The access module will be populated with a minimal schema valid information describing access levels.
+#'
 #'
 #' @inheritParams set_title
 #' @param access String. one of either "PUBLIC", "RESTRICTED", or "INTERNAL".
@@ -884,6 +887,9 @@ set_permissions <- function (eml_object,
       metadata = list(
         distribution = list(access_level = access)), id = "permissions")
   }
+
+  # --- NEW: build and set the native <access> element ---
+  eml_object$access <- .build_access(access)
 
   # get existing additionalMetadata elements:
   add_meta <- eml_object$additionalMetadata
