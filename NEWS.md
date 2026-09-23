@@ -1,4 +1,7 @@
 # EMLeditor v1.2.1 (Development version)
+## 2026-09-23
+  * Update get_title to explicitly get the dataset title, not just the first title.
+  
 ## 2026-09-22
   * Bug fix for `set_int_rights` when force == TRUE
   * Bug fix for `set_permissions` when force == TRUE
