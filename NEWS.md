@@ -1,5 +1,6 @@
 # EMLeditor v1.2.1 (Development version)
 ## 2026-09-23
+  * Add heper function `.build_access` in utils.R; incorporate `.build_access` into `set_permissions` to add an informative block to the access element in EML.
   * Update get_title to explicitly get the dataset title, not just the first title.
   
 ## 2026-09-22
