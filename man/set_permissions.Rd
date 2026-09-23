@@ -19,7 +19,7 @@ set_permissions(
 
 \item{access}{String. one of either "PUBLIC", "RESTRICTED", or "INTERNAL".}
 
-\item{legal_authority_id}{Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be ste to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use \code{NPSdatastore::get_legal_authority} to generate a list along with definitions.}
+\item{legal_authority_id}{Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, legal_authority must be set to a number between 1 and 31 that corresponds to the legal authority in DataStore. Use \code{NPSdatastore::get_legal_authority} to generate a list along with definitions.}
 
 \item{contact_email}{String. Defaults to NULL for PUBLIC access. for RESTRICTED or INTERNAL, an email address must be supplied. It will be used to request more information about a restricted source. It is suggested that this be a group email rather than an individual due to potential staff turnover.}
 
