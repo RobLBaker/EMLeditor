@@ -422,6 +422,7 @@ set_content_units <- function(eml_object, park_units,
 #' Adds CUI dissemination codes to metadata
 #'
 #' @description
+#' `r lifecycle::badge("deprecated")`
 #'  `set_cui_code()` adds Controlled Unclassified Information (CUI) dissemination codes to EML metadata. These codes determine who can or cannot have access to the data. Unless you have a specific mandate to restrict data, all data should be available to the public. if the CUI dissemination code is PUBLIC, the CUI marking should also be PUBLIC (`see set_cui_marking()`) and the license should be set to CC0 or public domain (see `set_int_rights()`). If your data contains CUI and you need to set the CUI dissemination code to anything other than PUBLIC, please be prepared to provide a legal justification in the form of the appropriate CUI marking (see `set_cui_marking()`).
 #'
 #' @details `set_cui_code()` adds a CUI dissemination code to the tag CUI under additionalMetadata/metadata. The available choices for CUI dissemination codes at NPS are (pay attention to the spaces!):
@@ -451,6 +452,9 @@ set_cui_code <- function(eml_object,
                                         "FED ONLY"),
                            force = FALSE,
                            NPS = TRUE) {
+
+  #add in deprecation
+  lifecycle::deprecate_soft(when = "1.3.0", "set_cui()", "set_permissions()")
 
   cui_code <- toupper(cui_code)
   # verify CUI code entry; stop if does not equal one of six valid codes listed above:
@@ -534,7 +538,7 @@ set_cui_code <- function(eml_object,
 #' Adds CUI to metadata
 #'
 #' @description
-#' #' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("deprecated")`
 #'  set_cui adds CUI dissemination codes to EML metadata
 #'
 #' @details set_cui adds a CUI code to the tag CUI under additionalMetadata/metadata.
@@ -562,7 +566,7 @@ set_cui <- function(eml_object,
                     force = FALSE,
                     NPS = TRUE) {
   #add in deprecation
-  lifecycle::deprecate_soft(when = "0.1.5", "set_cui()", "set_cui_code()")
+  lifecycle::deprecate_soft(when = "0.1.5", "set_cui()", "set_permissions()")
 
   cui_code <- toupper(cui_code)
   # verify CUI code entry; stop if does not equal one of six valid codes listed above:
@@ -642,7 +646,7 @@ set_cui <- function(eml_object,
 
 #' The function sets the CUI marking for the data package
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("deprecated")`
 #' The Controlled Unclassified Information (CUI) marking is different from the CUI dissemination code. The CUI dissemination code (set `set_cui_code()`) sets who can have access to the data package. The CUI marking set by `set_cui_marking()` specifies the reason (if any) that the data are being restricted.
 #' If the CUI dissemination code is set to PUBLIC, the CUI marking must also be PUBLIC.
 #' If the CUI dissemination code is set to anything other than PUBLIC, the CUI marking must be set to SP-NPSR, SP-HISTP or SP-ARCHR.
@@ -673,6 +677,9 @@ set_cui_marking <- function (eml_object,
                                              "SP-ARCHR"),
                              force = FALSE,
                              NPS = TRUE) {
+
+  #add in deprecation
+  lifecycle::deprecate_soft(when = "1.3.0", "set_cui_marking", "set_permissions()")
 
   cui_marking <- toupper(cui_marking)
   # verify CUI code entry; stop if does not equal one of six valid codes listed above:
