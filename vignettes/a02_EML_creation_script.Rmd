@@ -484,13 +484,12 @@ EMLassemblyine and ezEML provide some attractive boilerplate for
 setting the intellectual rights. It looks reasonable and so is easy to
 just keep. However, NPS has some specific regulations about what can and
 cannot be in the intellectualRights tag. Use `set_int_rights()` to
-replace the text with NPS-approved text. Note: You must first add the
-CUI dissemination code using `set_cui()` as the dissemination code and
-license must agree. That is, you cannot give a data package with a
-PUBLIC dissemination code a "restricted" license (and vise versa: a
-restricted data package that contains CUI cannot have a public domain or
-CC0 license). You can choose from one of three options, but **for most
-public NPS data packages, the CC0 license is appropriate**:
+replace the text with NPS-approved text. Note: You must first set the data 
+package permissions with `set_permissions()` above, as the access permissions 
+and license must agree. That is, you cannot give a data package with a PUBLIC dissemination code a "restricted" license (and vice versa: an INTERNAL data 
+package that contains CUI cannot have a public domain or CC0 license). You can
+choose from one of three options, but **for most public NPS data packages, the
+CC0 license is appropriate**:
 
 -   "CC0": This is the default license for all public NPS data packages:
     **"The person who associated a work with this deed has dedicated the 

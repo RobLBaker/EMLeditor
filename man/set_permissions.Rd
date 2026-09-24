@@ -33,10 +33,10 @@ set_permissions(
 an EML-formatted R object
 }
 \description{
-Adds information about file access permission levels.
+These permissions are only for file download access (including the EML metadata in .xml format). The actual reference landing page will not be restricted. For more information on CUI markings, please visit the \href{https://www.archives.gov/cui/registry/category-marking-list}{CUI Markings} list maintained by the National Archives. For a list of legal authorities, use \code{NPSdatastore::get_legal_authority}.
 }
 \details{
-These permissions are only for file download access (including the EML metadata in .xml format). The actual reference landing page will not be restricted. For more information on CUI markings, please visit the \href{https://www.archives.gov/cui/registry/category-marking-list}{CUI Markings} list maintained by the National Archives. For a list of legal authorities, use \code{NPSdatastore::get_legal_authority}.
+The details for the data package restriction (or public access), including the reason, the level, and the CUI code and links to relevant documentation, email addresses for contact and a person responsible for the decision will all be populated in a dedicated additionalMetadata element. The access module will be populated with a minimal schema valid information describing access levels.
 }
 \examples{
 \dontrun{
