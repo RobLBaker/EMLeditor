@@ -679,7 +679,7 @@ set_cui_marking <- function (eml_object,
                              NPS = TRUE) {
 
   #add in deprecation
-  lifecycle::deprecate_soft(when = "1.3.0", "set_cui_marking", "set_permissions()")
+  lifecycle::deprecate_soft(when = "1.3.0", "set_cui_marking()", "set_permissions()")
 
   cui_marking <- toupper(cui_marking)
   # verify CUI code entry; stop if does not equal one of six valid codes listed above:
