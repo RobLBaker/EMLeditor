@@ -355,7 +355,7 @@ globalVariables(c("UnitCode",
       ),
       order = "allowFirst",
       scope = "document",
-      authSystem = "https://www.nps.gov"
+      authSystem = "https://irma.nps.gov/DataStore"
     )
   } else {
     # RESTRICTED or INTERNAL: deny public read.
@@ -369,7 +369,7 @@ globalVariables(c("UnitCode",
       ),
       order = "denyFirst",
       scope = "document",
-      authSystem = "https://www.nps.gov"
+      authSystem = "https://irma.nps.gov/DataStore"
     )
   }
 }
