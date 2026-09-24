@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">EMLeditor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -499,13 +499,14 @@ setting the intellectual rights. It looks reasonable and so is easy to
 just keep. However, NPS has some specific regulations about what can and
 cannot be in the intellectualRights tag. Use
 <code><a href="../reference/set_int_rights.html">set_int_rights()</a></code> to replace the text with NPS-approved
-text. Note: You must first add the CUI dissemination code using
-<code><a href="../reference/set_cui.html">set_cui()</a></code> as the dissemination code and license must agree.
-That is, you cannot give a data package with a PUBLIC dissemination code
-a “restricted” license (and vise versa: a restricted data package that
-contains CUI cannot have a public domain or CC0 license). You can choose
-from one of three options, but <strong>for most public NPS data
-packages, the CC0 license is appropriate</strong>:</p>
+text. Note: You must first set the data package permissions with
+<code><a href="../reference/set_permissions.html">set_permissions()</a></code> above, as the access permissions and
+license must agree. That is, you cannot give a data package with a
+PUBLIC dissemination code a “restricted” license (and vice versa: an
+INTERNAL data package that contains CUI cannot have a public domain or
+CC0 license). You can choose from one of three options, but <strong>for
+most public NPS data packages, the CC0 license is
+appropriate</strong>:</p>
 <ul>
 <li><p>“CC0”: This is the default license for all public NPS data
 packages: <strong>“The person who associated a work with this deed has
