@@ -895,8 +895,6 @@ set_permissions <- function (eml_object,
         distribution = list(access_level = access)), id = "permissions")
   }
 
-  # --- NEW: build and set the native <access> element ---
-  eml_object$access <- .build_access(access)
 
   # get existing additionalMetadata elements:
   add_meta <- eml_object$additionalMetadata
@@ -929,6 +927,9 @@ set_permissions <- function (eml_object,
     # scripting route:
     # existence of strong_good implies the existence of strong_bad!
     if (force == TRUE) {
+      # --- NEW: build and set the native <access> element ---
+      eml_object$access <- .build_access(access)
+
       if (is.null(seq)) {
         if (x == 1) {
           eml_object$additionalMetadata <- list(my_cui,
@@ -951,6 +952,9 @@ set_permissions <- function (eml_object,
       if (is.null(exist_cui)) {
         # if only one element in additional metadata
         if (x == 1) {
+          # --- NEW: build and set the native <access> element ---
+          eml_object$access <- .build_access(access)
+
           eml_object$additionalMetadata <- list(my_cui,
                                                 eml_object$additionalMetadata)
         }
@@ -976,9 +980,13 @@ set_permissions <- function (eml_object,
                         ". Would you like to update it?"))
         var1 <- .get_user_input() #1 = yes, 2 = no
         if (var1 == 1) {
+          # --- NEW: build and set the native <access> element ---
+          eml_object$access <- .build_access(access)
+
           eml_object$additionalMetadata[[seq]] <- my_cui
           cli::cli_inform(paste0("Your permissions have been set to ",
                                  .strong_good(access), "."))
+
           if (stringr::str_detect(access, "RESTRICTED|INTERNAL")) {
             cli::cli_inform(c(paste0("The CUI label has been set to ",
                                      "{.strong {authority$label}} and ",
