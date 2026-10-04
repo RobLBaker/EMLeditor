@@ -861,7 +861,7 @@ set_permissions <- function (eml_object,
     # test legal authority is an integer within correct range
     if((!legal_authority_id %% 1 == 0) ||
         (legal_authority_id < 1 ||
-        legal_authority_id > 32)) {
+        legal_authority_id > 31)) {
       cli::cli_abort(c(x = paste0("The legal_authority_id parameter must be ",
                                   "an integer between 1 and 31 (inclusive).")))
     }
