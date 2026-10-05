@@ -901,6 +901,9 @@ set_permissions <- function (eml_object,
 
   #if no additional metadata at all....
   if (is.null(add_meta)) {
+    # --- NEW: build and set the native <access> element ---
+    eml_object$access <- .build_access(access)
+
     eml_object$additionalMetadata <- list(my_cui)
   }
   if(!is.null(add_meta)){
@@ -950,10 +953,11 @@ set_permissions <- function (eml_object,
     if (force == FALSE) {
       # If no existing CUI, add it in:
       if (is.null(exist_cui)) {
+        # --- NEW: build and set the native <access> element ---
+        eml_object$access <- .build_access(access)
+
         # if only one element in additional metadata
         if (x == 1) {
-          # --- NEW: build and set the native <access> element ---
-          eml_object$access <- .build_access(access)
 
           eml_object$additionalMetadata <- list(my_cui,
                                                 eml_object$additionalMetadata)
