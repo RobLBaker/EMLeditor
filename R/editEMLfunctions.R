@@ -892,7 +892,7 @@ set_permissions <- function (eml_object,
   else {
     my_cui <- list(
       metadata = list(
-        distribution = list(access_level = access)), id = "permissions")
+        distribution = list(accessLevel = access)), id = "permissions")
   }
 
 
