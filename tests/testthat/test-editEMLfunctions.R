@@ -374,7 +374,7 @@ test_that("set_permissions updates when requested to, public", {
   local({mockr::local_mock(.get_user_input = return_val_1)
         new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
         expect_equal(new_meta[["additionalMetadata"]][[3]][["metadata"]]
-                     [["distribution"]][["access_level"]], "PUBLIC")
+                     [["distribution"]][["accessLevel"]], "PUBLIC")
   })
 })
 
