@@ -1,4 +1,7 @@
 # EMLeditor v1.3.0 ("Angel's Landing")
+## 2026-10-06
+  * Bug fixes for `set_permissions` and updated unit test.
+  
 ## 2026-09-28
   * Update `.set_version` to consolidate all apps/versions under a single additionalMetadata element.
   * Update corresponding unit tests.
