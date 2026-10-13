@@ -2527,7 +2527,8 @@ set_int_rights <- function(eml_object,
         if(cui2 == "PUBLIC"){
           if(license == "CC0"){
             eml_object$dataset$intellectualRights <- CCzero
-            eml_object$dataset$licensed$licenseName <- "Creative Commons Zero v1.0 Universal"
+            eml_object$dataset$licensed$licenseName <-
+              "Creative Commons Zero v1.0 Universal"
             cat("Your license has been set to:", crayon::blue$bold("CC0"))
           }
           if(license == "public"){
@@ -2539,20 +2540,24 @@ set_int_rights <- function(eml_object,
         }
         # warn user license not set, CUI and license don't agree:
         if(cui2 != "PUBLIC"){
-          cat("Your CUI is set to ", crayon::blue$bold(cui2), ".")
+          cat("Your permissions are set to ", crayon::blue$bold(cui2), ".")
           writeLines(paste0("To use a CC0 or public domain license",
                             " your CUI must be PUBLIC."))
-          cat("Use", crayon::bold$green("set_cui()"), "to change your CUI.")
+          cat("Use", crayon::bold$green("set_permissions()"),
+              "to change your CUI.")
         }
       }
       if(license == "restricted"){
-        if(cui2 == "PUBLIC"){
-          cat("Your CUI is set to ", crayon::blue$bold(cui2), ".\n", sep="")
+        if(!(cui2 == "RESTRICTED" || cui2 == "INTERNAL")){
+          cat("Your permissions are set to ", crayon::blue$bold(cui2),
+              ".\n", sep="")
           writeLines(paste0("To use a restricted license, ",
-                            "your CUI must NOT be set to PUBLIC."))
-          cat("Use", crayon::bold$green("set_cui()"), "to change your CUI.")
+                            "your permissions must be set to INTERNAL or, ",
+                            "RESTRICTED"))
+          cat("Use", crayon::bold$green("set_permissions()"),
+              "to change your CUI.")
         }
-        if(cui2 != "PUBLIC"){
+        if(cui2 == "RESTRICTED" || cui2 == "INTERNAL"){
           eml_object$dataset$intellectualRights <- restrict
           eml_object$dataset$licensed$licenseName <-
             "Unlicensed (not for public dissemination)"
@@ -2569,9 +2574,8 @@ set_int_rights <- function(eml_object,
 
     if(is.null(cui2)){
       cli::cli_abort(c(x = paste0(
-        "No CUI/access-level information found on eml_object. ",
-        "set_permissions() must be called before set_int_rights() ",
-        "when force = TRUE."
+        "No CUI/access-level information found in eml_object. ",
+        "{.fun set_permissions()} must be called before {.fn set_int_rights()}."
       )))
     }
 
@@ -2588,14 +2592,23 @@ set_int_rights <- function(eml_object,
           }
         }
         if(cui2 != "PUBLIC"){
+          cli::cli_abort(c(x = paste0("To use a CC0 or public license, ",
+                                      "permissions must be set to PUBLIC. ",
+                                      "Use {.fn set_permissions()} to update ",
+                                      "permisions.")))
           return()
         }
       }
       if(license == "restricted"){
-        if(cui2 == "PUBLIC"){
+        if(!(cui2 == "INTERNAL" || cui2 == "RESTRICTED")){
+          cli::cli_abort(c(x = paste0("To use a restricted license, ",
+                                      "permissions must be set to either ",
+                                      "RESTRICTED or INTERNAL. Use ",
+                                      "{.fn set_permissions()} to update ",
+                                      "permissions.")))
           return()
         }
-        if(cui2 != "PUBLIC"){
+        if(cui2 == "RESTRICTED" || cui2 == "INTERNAL"){
           eml_object$dataset$intellectualRights <- restrict
         }
       }
