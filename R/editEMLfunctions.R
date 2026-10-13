@@ -2474,14 +2474,30 @@ set_int_rights <- function(eml_object,
                           license = c("CC0", "public", "restricted"),
                           force = FALSE,
                           NPS = TRUE){
+  # handle typos/capitalization/etc:
+    if (license == "cc0" || license == "CC0" || license == "ccO") {
+    license <- "CC0"
+  }
+  if (license != "CC0") {
+    tolower(license)
+  }
   # verify license type selection; stop if does not equal one of 3 valid codes:
   # license <- tolower(license) #was causing issues with CC0 vs cc0.
   license <- match.arg(license)
 
   #set up license text:
-  CCzero <- 'This product is released to the "public domain" under Creative Commons CC0 1.0 No Rights Reserved (see: https://creativecommons.org/publicdomain/zero/1.0/).'
-  pub_domain <- 'This product is released to the "public domain" under U.S. Government Works No Rights Reserved (see: http://www.usa.gov/publicdomain/label/1.0/).'
-  restrict <- "This product has been determined to contain Controlled Unclassified Information (CUI) or to be otherwise restricted by the National Park Service, and is intended for specific purposes. It is not published under an open license. Unauthorized access, use, and distribution are prohibited."
+  CCzero <- paste0("This product is released to the 'public domain' under ",
+                   "Creative Commons CC0 1.0 No Rights Reserved ",
+                   "(see: https://creativecommons.org/publicdomain/zero/1.0/).")
+  pub_domain <- paste0("This product is released to the 'public domain' under",
+                       " U.S. Government Works No Rights Reserved (see: ",
+                       "http://www.usa.gov/publicdomain/label/1.0/).")
+  restrict <- paste0("This product has been determined to contain Controlled ",
+                     "Unclassified Information (CUI) or to be otherwise ",
+                     "restricted by the National Park Service, and is ",
+                     "intended for specific purposes. It is not published ",
+                     "under an open license. Unauthorized access, use, and ",
+                     "distribution are prohibited.")
 
   # get CUI info from additionalMetadata:
   .find_existing_cui <- function(add_meta) {
@@ -2514,10 +2530,9 @@ set_int_rights <- function(eml_object,
     # enforce CUI info prior to setting license:
     # if there is no CUI specified, stop.
     if(is.null(cui2)){
-      return(paste0(cat("No CUI information found.\n"),
-                    cat("You must set CUI prior to setting the license.\nUse",
-                        crayon::bold$green("set_cui()"),
-                        "to specify CUI.")))
+      cli::cli_abort(c(x = paste0("No CUI information or permissions were ",
+                                  "found. You must use {.fn set_permissions}",
+                                  " prior to setting the license.")))
     }
     # if CUI was specified:
     if(!is.null(cui2)){
@@ -2529,40 +2544,41 @@ set_int_rights <- function(eml_object,
             eml_object$dataset$intellectualRights <- CCzero
             eml_object$dataset$licensed$licenseName <-
               "Creative Commons Zero v1.0 Universal"
-            cat("Your license has been set to:", crayon::blue$bold("CC0"))
+            cli::cli_inform(c(v = paste0("Your license has been set to: ",
+                                         "{(.strong_good('CC0'))}.")))
           }
           if(license == "public"){
             eml_object$dataset$intellectualRights <- pub_domain
             eml_object$dataset$licensed$licenseName <- "Public Domain"
-            cat("Your license has been set to:",
-                crayon::blue$bold("Public Domain"))
+            cli::cli_inform(c(v = paste0("Your license has been set to: ",
+                                         "{(.strong_good('Public Domain'))}.")))
           }
         }
         # warn user license not set, CUI and license don't agree:
         if(cui2 != "PUBLIC"){
-          cat("Your permissions are set to ", crayon::blue$bold(cui2), ".")
-          writeLines(paste0("To use a CC0 or public domain license",
-                            " your CUI must be PUBLIC."))
-          cat("Use", crayon::bold$green("set_permissions()"),
-              "to change your CUI.")
+          cli::cli_abort(c(x = paste0("Your permissions are set to ",
+                                      "{(.strong_good(cui2))}. To use a CC0 ",
+                                      "or public domain license your ",
+                                      "permissions must be set to PUBLIC. ",
+                                      "use {.fn set_permissions()} to update",
+                                      " your permissions.")))
         }
       }
       if(license == "restricted"){
         if(!(cui2 == "RESTRICTED" || cui2 == "INTERNAL")){
-          cat("Your permissions are set to ", crayon::blue$bold(cui2),
-              ".\n", sep="")
-          writeLines(paste0("To use a restricted license, ",
-                            "your permissions must be set to INTERNAL or, ",
-                            "RESTRICTED"))
-          cat("Use", crayon::bold$green("set_permissions()"),
-              "to change your CUI.")
+          cli::cli_abort(c(x = paste0("Your permissions are set to ",
+                                      "{(.strong_good(cui2))}. To use a ",
+                                      "restricted license, you must use ",
+                                      "{.fn set_permissions()} to update your ",
+                                      "permissions to either INTERNAL or ",
+                                      "RESTRICTED")))
         }
         if(cui2 == "RESTRICTED" || cui2 == "INTERNAL"){
           eml_object$dataset$intellectualRights <- restrict
           eml_object$dataset$licensed$licenseName <-
             "Unlicensed (not for public dissemination)"
-          cat("Your license has been set to ",
-              crayon::bold$blue("Restricted"), ".", sep="")
+          cli::cli_inform(c(v = paste0("Your license has been set to: ",
+                                       "{(.strong_good('Restricted'))}.")))
         }
       }
     }
