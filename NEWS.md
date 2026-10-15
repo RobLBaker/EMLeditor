@@ -1,4 +1,6 @@
 # EMLeditor v1.3.0 ("Angel's Landing")
+## 2026-10-15
+  * Bug fix for `set_doi` that was setting data table URLs to irmadev
 ## 2026-10-06
   * Bug fixes for `set_permissions` and updated unit test.
   
