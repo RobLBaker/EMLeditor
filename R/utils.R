@@ -151,39 +151,39 @@ globalVariables(c("UnitCode",
         my_list <- append(my_list, add_meta[i])
       }
     }
-    x <- length(my_list)
+  }
+  x <- length(my_list)
 
-    # does it include EMLeditor?
-    app <- NULL
-    for (i in seq_along(add_meta)) {
-      if (suppressWarnings(stringr::str_detect(add_meta[i], "EMLeditor"))) {
-        app <- "EMLeditor"
-        version <-
-          eml_object[["additionalMetadata"]][[i]][["metadata"]][[
-            "emlEditor"]][["release"]]
-        if (version == current_vers) {
-          return(eml_object)
-        } else {
-          eml_object[["additionalMetadata"]][[i]][["metadata"]][[
-            "emlEditor"]][["release"]] <- current_vers
-        }
+  # does it include EMLeditor?
+  app <- NULL
+  for (i in seq_along(add_meta)) {
+    if (suppressWarnings(stringr::str_detect(add_meta[i], "EMLeditor"))) {
+      app <- "EMLeditor"
+      version <-
+        eml_object[["additionalMetadata"]][[i]][["metadata"]][[
+          "emlEditor"]][["release"]]
+     # if version is current, do nothing.
+      if (version == current_vers) {
+        return(eml_object)
+      }
+      # if version is not current, update it.
+      else {
+        eml_object[["additionalMetadata"]][[i]][["metadata"]][[
+          "emlEditor"]][["release"]] <- current_vers
       }
     }
   }
-
-
-    # if no info on EMLeditor, add EMLeditor to additionalMetadata
-    if (is.null(app)) {
-      if (x == 1) {
-        eml_object$additionalMetadata <- list(eml_ed,
-                                              eml_object$additionalMetadata)
-      }
-      if (x > 1) {
-        eml_object$additionalMetadata[[x + 1]] <- eml_ed
-      }
+  # if no info on EMLeditor, add EMLeditor to additionalMetadata
+  if (is.null(app)) {
+    if (x == 1) {
+      eml_object$additionalMetadata <- list(eml_ed,
+                                            eml_object$additionalMetadata)
+    }
+    if (x > 1) {
+      eml_object$additionalMetadata[[x + 1]] <- eml_ed
     }
   }
-  return(eml_object)
+return(eml_object)
 }
 
 
