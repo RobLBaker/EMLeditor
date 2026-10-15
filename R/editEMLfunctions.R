@@ -150,7 +150,7 @@ set_doi <- function(eml_object,
     }
   }
   # update data URLs to correspond to new DOI
-  data_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
+  data_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
                        ds_ref)
 
   eml_object <- set_data_urls(eml_object = eml_object,
