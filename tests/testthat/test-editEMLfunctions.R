@@ -374,7 +374,7 @@ test_that("set_permissions updates when requested to, public", {
   local({mockr::local_mock(.get_user_input = return_val_1)
         new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
         expect_equal(new_meta[["additionalMetadata"]][[4]][["metadata"]]
-                     [["distribution"]][["access_level"]], "PUBLIC")
+                     [["distribution"]][["accessLevel"]], "PUBLIC")
   })
 })
 
@@ -846,17 +846,26 @@ test_that("set_int_rights updates intellectual rights when requested", {
   })
 })
 
-test_that("set_int_rights does not update when conflict exists:", {
+test_that("set_int_rights produces error for old cui:", {
   return_val_2 <- function() {2}
   local({mockr::local_mock(.get_user_input = return_val_2)
     new_meta <- set_cui_code(BICY_EMLed_meta, "PUBLIC", force = TRUE)
-    new_meta2 <- set_int_rights(new_meta,
-                                license = "restricted",
-                                force = FALSE)
-    expect_false(stringr::str_length(
-      new_meta2[["dataset"]][["intellectualRights"]]) ==
-      145)
+    expect_error(new_meta2 <- set_int_rights(new_meta,
+                                             license = "restricted",
+                                             force = FALSE)
+    )
   })
+})
+
+test_that("set_int_rights errors when permission/license mismatch", {
+  return_val_1 <- function() {1}
+  local({mockr::local_mock(.get_user_input = return_val_1)
+    new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
+    expect_error(new_meta2 <- set_int_rights(new_meta,
+                                             license = "restricted",
+                                             force = FALSE)
+                 )
+    })
 })
 
 # ----- test set_data_urls

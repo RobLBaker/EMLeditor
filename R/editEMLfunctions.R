@@ -150,7 +150,7 @@ set_doi <- function(eml_object,
     }
   }
   # update data URLs to correspond to new DOI
-  data_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
+  data_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
                        ds_ref)
 
   eml_object <- set_data_urls(eml_object = eml_object,
@@ -859,9 +859,9 @@ set_permissions <- function (eml_object,
       }
     }
     # test legal authority is an integer within correct range
-    if((!legal_authority_id %% 1 == 0) &&
-        legal_authority_id > 0 &&
-        legal_authority_id < 32) {
+    if((!legal_authority_id %% 1 == 0) ||
+        (legal_authority_id < 1 ||
+        legal_authority_id > 31)) {
       cli::cli_abort(c(x = paste0("The legal_authority_id parameter must be ",
                                   "an integer between 1 and 31 (inclusive).")))
     }
@@ -892,17 +892,18 @@ set_permissions <- function (eml_object,
   else {
     my_cui <- list(
       metadata = list(
-        distribution = list(access_level = access)), id = "permissions")
+        distribution = list(accessLevel = access)), id = "permissions")
   }
 
-  # --- NEW: build and set the native <access> element ---
-  eml_object$access <- .build_access(access)
 
   # get existing additionalMetadata elements:
   add_meta <- eml_object$additionalMetadata
 
   #if no additional metadata at all....
   if (is.null(add_meta)) {
+    # --- NEW: build and set the native <access> element ---
+    eml_object$access <- .build_access(access)
+
     eml_object$additionalMetadata <- list(my_cui)
   }
   if(!is.null(add_meta)){
@@ -929,6 +930,9 @@ set_permissions <- function (eml_object,
     # scripting route:
     # existence of strong_good implies the existence of strong_bad!
     if (force == TRUE) {
+      # --- NEW: build and set the native <access> element ---
+      eml_object$access <- .build_access(access)
+
       if (is.null(seq)) {
         if (x == 1) {
           eml_object$additionalMetadata <- list(my_cui,
@@ -949,8 +953,12 @@ set_permissions <- function (eml_object,
     if (force == FALSE) {
       # If no existing CUI, add it in:
       if (is.null(exist_cui)) {
+        # --- NEW: build and set the native <access> element ---
+        eml_object$access <- .build_access(access)
+
         # if only one element in additional metadata
         if (x == 1) {
+
           eml_object$additionalMetadata <- list(my_cui,
                                                 eml_object$additionalMetadata)
         }
@@ -976,9 +984,13 @@ set_permissions <- function (eml_object,
                         ". Would you like to update it?"))
         var1 <- .get_user_input() #1 = yes, 2 = no
         if (var1 == 1) {
+          # --- NEW: build and set the native <access> element ---
+          eml_object$access <- .build_access(access)
+
           eml_object$additionalMetadata[[seq]] <- my_cui
           cli::cli_inform(paste0("Your permissions have been set to ",
                                  .strong_good(access), "."))
+
           if (stringr::str_detect(access, "RESTRICTED|INTERNAL")) {
             cli::cli_inform(c(paste0("The CUI label has been set to ",
                                      "{.strong {authority$label}} and ",
@@ -2462,14 +2474,30 @@ set_int_rights <- function(eml_object,
                           license = c("CC0", "public", "restricted"),
                           force = FALSE,
                           NPS = TRUE){
+  # handle typos/capitalization/etc:
+    if (license == "cc0" || license == "CC0" || license == "ccO") {
+    license <- "CC0"
+  }
+  if (license != "CC0") {
+    tolower(license)
+  }
   # verify license type selection; stop if does not equal one of 3 valid codes:
   # license <- tolower(license) #was causing issues with CC0 vs cc0.
   license <- match.arg(license)
 
   #set up license text:
-  CCzero <- 'This product is released to the "public domain" under Creative Commons CC0 1.0 No Rights Reserved (see: https://creativecommons.org/publicdomain/zero/1.0/).'
-  pub_domain <- 'This product is released to the "public domain" under U.S. Government Works No Rights Reserved (see: http://www.usa.gov/publicdomain/label/1.0/).'
-  restrict <- "This product has been determined to contain Controlled Unclassified Information (CUI) or to be otherwise restricted by the National Park Service, and is intended for specific purposes. It is not published under an open license. Unauthorized access, use, and distribution are prohibited."
+  CCzero <- paste0("This product is released to the 'public domain' under ",
+                   "Creative Commons CC0 1.0 No Rights Reserved ",
+                   "(see: https://creativecommons.org/publicdomain/zero/1.0/).")
+  pub_domain <- paste0("This product is released to the 'public domain' under",
+                       " U.S. Government Works No Rights Reserved (see: ",
+                       "http://www.usa.gov/publicdomain/label/1.0/).")
+  restrict <- paste0("This product has been determined to contain Controlled ",
+                     "Unclassified Information (CUI) or to be otherwise ",
+                     "restricted by the National Park Service, and is ",
+                     "intended for specific purposes. It is not published ",
+                     "under an open license. Unauthorized access, use, and ",
+                     "distribution are prohibited.")
 
   # get CUI info from additionalMetadata:
   .find_existing_cui <- function(add_meta) {
@@ -2502,10 +2530,9 @@ set_int_rights <- function(eml_object,
     # enforce CUI info prior to setting license:
     # if there is no CUI specified, stop.
     if(is.null(cui2)){
-      return(paste0(cat("No CUI information found.\n"),
-                    cat("You must set CUI prior to setting the license.\nUse",
-                        crayon::bold$green("set_cui()"),
-                        "to specify CUI.")))
+      cli::cli_abort(c(x = paste0("No CUI information or permissions were ",
+                                  "found. You must use {.fn set_permissions}",
+                                  " prior to setting the license.")))
     }
     # if CUI was specified:
     if(!is.null(cui2)){
@@ -2515,37 +2542,43 @@ set_int_rights <- function(eml_object,
         if(cui2 == "PUBLIC"){
           if(license == "CC0"){
             eml_object$dataset$intellectualRights <- CCzero
-            eml_object$dataset$licensed$licenseName <- "Creative Commons Zero v1.0 Universal"
-            cat("Your license has been set to:", crayon::blue$bold("CC0"))
+            eml_object$dataset$licensed$licenseName <-
+              "Creative Commons Zero v1.0 Universal"
+            cli::cli_inform(c(v = paste0("Your license has been set to: ",
+                                         "{(.strong_good('CC0'))}.")))
           }
           if(license == "public"){
             eml_object$dataset$intellectualRights <- pub_domain
             eml_object$dataset$licensed$licenseName <- "Public Domain"
-            cat("Your license has been set to:",
-                crayon::blue$bold("Public Domain"))
+            cli::cli_inform(c(v = paste0("Your license has been set to: ",
+                                         "{(.strong_good('Public Domain'))}.")))
           }
         }
         # warn user license not set, CUI and license don't agree:
         if(cui2 != "PUBLIC"){
-          cat("Your CUI is set to ", crayon::blue$bold(cui2), ".")
-          writeLines(paste0("To use a CC0 or public domain license",
-                            " your CUI must be PUBLIC."))
-          cat("Use", crayon::bold$green("set_cui()"), "to change your CUI.")
+          cli::cli_abort(c(x = paste0("Your permissions are set to ",
+                                      "{(.strong_good(cui2))}. To use a CC0 ",
+                                      "or public domain license your ",
+                                      "permissions must be set to PUBLIC. ",
+                                      "use {.fn set_permissions()} to update",
+                                      " your permissions.")))
         }
       }
       if(license == "restricted"){
-        if(cui2 == "PUBLIC"){
-          cat("Your CUI is set to ", crayon::blue$bold(cui2), ".\n", sep="")
-          writeLines(paste0("To use a restricted license, ",
-                            "your CUI must NOT be set to PUBLIC."))
-          cat("Use", crayon::bold$green("set_cui()"), "to change your CUI.")
+        if(!(cui2 == "RESTRICTED" || cui2 == "INTERNAL")){
+          cli::cli_abort(c(x = paste0("Your permissions are set to ",
+                                      "{(.strong_good(cui2))}. To use a ",
+                                      "restricted license, you must use ",
+                                      "{.fn set_permissions()} to update your ",
+                                      "permissions to either INTERNAL or ",
+                                      "RESTRICTED")))
         }
-        if(cui2 != "PUBLIC"){
+        if(cui2 == "RESTRICTED" || cui2 == "INTERNAL"){
           eml_object$dataset$intellectualRights <- restrict
           eml_object$dataset$licensed$licenseName <-
             "Unlicensed (not for public dissemination)"
-          cat("Your license has been set to ",
-              crayon::bold$blue("Restricted"), ".", sep="")
+          cli::cli_inform(c(v = paste0("Your license has been set to: ",
+                                       "{(.strong_good('Restricted'))}.")))
         }
       }
     }
@@ -2557,9 +2590,8 @@ set_int_rights <- function(eml_object,
 
     if(is.null(cui2)){
       cli::cli_abort(c(x = paste0(
-        "No CUI/access-level information found on eml_object. ",
-        "set_permissions() must be called before set_int_rights() ",
-        "when force = TRUE."
+        "No CUI/access-level information found in eml_object. ",
+        "{.fun set_permissions()} must be called before {.fn set_int_rights()}."
       )))
     }
 
@@ -2576,14 +2608,23 @@ set_int_rights <- function(eml_object,
           }
         }
         if(cui2 != "PUBLIC"){
+          cli::cli_abort(c(x = paste0("To use a CC0 or public license, ",
+                                      "permissions must be set to PUBLIC. ",
+                                      "Use {.fn set_permissions()} to update ",
+                                      "permisions.")))
           return()
         }
       }
       if(license == "restricted"){
-        if(cui2 == "PUBLIC"){
+        if(!(cui2 == "INTERNAL" || cui2 == "RESTRICTED")){
+          cli::cli_abort(c(x = paste0("To use a restricted license, ",
+                                      "permissions must be set to either ",
+                                      "RESTRICTED or INTERNAL. Use ",
+                                      "{.fn set_permissions()} to update ",
+                                      "permissions.")))
           return()
         }
-        if(cui2 != "PUBLIC"){
+        if(cui2 == "RESTRICTED" || cui2 == "INTERNAL"){
           eml_object$dataset$intellectualRights <- restrict
         }
       }
