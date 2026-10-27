@@ -1,3 +1,7 @@
+# EMLeditor v1.3.1 (development version)
+## 2026-10-27
+  *Bug fix for `set_int_rights` when force == TRUE (again?)
+
 # EMLeditor v1.3.0 ("Angel's Landing")
 ## 2026-10-15
   * Bug fix for `set_doi` that was setting data table URLs to irmadev
