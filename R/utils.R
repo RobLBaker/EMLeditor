@@ -489,11 +489,16 @@ return(eml_object)
   )
 }
 
-#' Null/empty-coalescing helper used by .upload_package_files() for the
-#' uploaded-URL fallback. Defined here in case EMLeditor doesn't already
-#' export a package-wide %||%; if it DOES, remove this to avoid a duplicate
-#' definition (they are functionally equivalent for this use).
-#' @rawNamespace export(`%||%`)
+#' Null/empty-coalescing helper
+#'
+#' Repurposed from rlang.
+#'
+#' @param a something that can be null or have length 0
+#' @param b a non-null return value
+#' @returns a or b
+#' @name grapes-or-or-grapes
+#' @aliases %||%
+#' @keywords internal
 `%||%` <- function(a, b) if (is.null(a) ||
                              length(a) == 0 ||
                              (length(a) == 1 && is.na(a))) b else a
