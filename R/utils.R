@@ -395,7 +395,6 @@ return(eml_object)
 #'   progress, TRUE = quiet
 #' @return list(status=, ...) - see above
 #' @keywords internal
-#' @keywords internal
 
 .upload_package_files <- function(directory, DS_ref, dev, force, verbose = FALSE) {
 
