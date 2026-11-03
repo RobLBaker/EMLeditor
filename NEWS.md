@@ -1,4 +1,7 @@
 # EMLeditor v1.3.1 (development version)
+## 2026-11-03
+  * fix typo in EML creation script template EMLediter -> EMLeditor
+
 ## 2026-10-28
   * add `.upload_package_files` helper function, which wraps NPSdatastore::upload_files_to_reference and escapes 32 mb file size upload ceiling.
   * update `upload_data_package` to use `upload_package_files` (no longer subject to 32Mb file size ceiling) and be compatible with breezeml
