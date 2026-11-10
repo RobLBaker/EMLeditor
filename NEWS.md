@@ -1,4 +1,8 @@
-# EMLeditor v1.3.0 ("Angel's Landing")
+# EMLeditor v1.3.1 
+## 2026-11-10
+  * Updates for breezeml compatibility. Should not affect EMLeditor user experience.
+
+# EMLeditor v1.3.0 ("Angel's Landing")  
 ## 2026-10-15
   * Bug fix for `set_doi` that was setting data table URLs to irmadev
 ## 2026-10-06
