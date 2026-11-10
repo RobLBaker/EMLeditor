@@ -16,7 +16,7 @@ can use the EMLeditor functions to make changes to your EML rather than
 re-running the entire EML creation script.
 
 When you run the
-[`DPchecker::run_congruence_checks()`](https://rdrr.io/pkg/DPchecker/man/run_congruence_checks.html)
+[`DPchecker::run_congruence_checks()`](https://doi-nps.github.io/DPchecker/reference/run_congruence_checks.html)
 function on your data package, each warning and error returned should
 include an indication of how to address the problem. If the problem is
 with the metadata (as opposed to the data), DPchecker should give you a

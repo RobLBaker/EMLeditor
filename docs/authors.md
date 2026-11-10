@@ -19,12 +19,12 @@ Source:
 [`DESCRIPTION`](https://github.com/doi-NPS/EMLeditor/blob/HEAD/DESCRIPTION)
 
 Baker R, Patterson J (2026). *EMLeditor: View and Edit EML Metadata*. R
-package version 1.3.0, <https://github.com/doi-nps/EMLeditor>.
+package version 1.3.1, <https://github.com/doi-nps/EMLeditor>.
 
     @Manual{,
       title = {EMLeditor: View and Edit EML Metadata},
       author = {Robert Baker and Judd Patterson},
       year = {2026},
-      note = {R package version 1.3.0},
+      note = {R package version 1.3.1},
       url = {https://github.com/doi-nps/EMLeditor},
     }

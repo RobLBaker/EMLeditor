@@ -6,7 +6,7 @@ restricted. For more information on CUI markings, please visit the [CUI
 Markings](https://www.archives.gov/cui/registry/category-marking-list)
 list maintained by the National Archives. For a list of legal
 authorities, use
-[`NPSdatastore::get_legal_authority`](https://rdrr.io/pkg/NPSdatastore/man/get_legal_authority.html).
+[`NPSdatastore::get_legal_authority`](https://doi-nps.github.io/NPSdatastore/reference/get_legal_authority.html).
 
 ## Usage
 
@@ -39,7 +39,7 @@ set_permissions(
   Integer. Defaults to NULL for PUBLIC access. for RESTRICTED or
   INTERNAL, legal_authority must be set to a number between 1 and 31
   that corresponds to the legal authority in DataStore. Use
-  [`NPSdatastore::get_legal_authority`](https://rdrr.io/pkg/NPSdatastore/man/get_legal_authority.html)
+  [`NPSdatastore::get_legal_authority`](https://doi-nps.github.io/NPSdatastore/reference/get_legal_authority.html)
   to generate a list along with definitions.
 
 - contact_email:

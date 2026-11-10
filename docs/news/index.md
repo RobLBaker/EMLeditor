@@ -1,5 +1,12 @@
 # Changelog
 
+## EMLeditor v1.3.1
+
+### 2026-11-10
+
+- Updates for breezeml compatibility. Should not affect EMLeditor user
+  experience.
+
 ## EMLeditor v1.3.0 (“Angel’s Landing”)
 
 ### 2026-10-15
@@ -145,7 +152,7 @@
 ### 2025-03-10
 
 - refactor upload_data_package to not depend on
-  [`DPchecker::load_metadata`](https://rdrr.io/pkg/DPchecker/man/load_metadata.html)
+  [`DPchecker::load_metadata`](https://doi-nps.github.io/DPchecker/reference/load_metadata.html)
   \## 2025-03-10
 - Updated license to OSI-approved “Zero-Clause BSD” in support of JOSS
   submission.
@@ -670,7 +677,7 @@ Added `check_eml()` function.
 #### Major changes
 
 `check_eml()` function is a wrapper that calls
-[`DPchecker::run_congruence_checks()`](https://rdrr.io/pkg/DPchecker/man/run_congruence_checks.html)
+[`DPchecker::run_congruence_checks()`](https://doi-nps.github.io/DPchecker/reference/run_congruence_checks.html)
 with `check_metadata-only = TRUE`. To run all the metadata-specific
 tests that will be run during a congruence test.
 

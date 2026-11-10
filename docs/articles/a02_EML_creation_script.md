@@ -451,7 +451,7 @@ files).
 You must also select a justification for choosing INTERNAL or
 RESTRICTED. These are codes from 1-32 (inclusive). The full list of
 codes and their justifications can be accessed using
-[`NPSdatastore::get_legal_authority`](https://rdrr.io/pkg/NPSdatastore/man/get_legal_authority.html)
+[`NPSdatastore::get_legal_authority`](https://doi-nps.github.io/NPSdatastore/reference/get_legal_authority.html)
 
 If you choose INTERNAL or RESTRICTED you must also supply a contact
 email address for people who want to request access (we suggest a group
